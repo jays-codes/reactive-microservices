@@ -1,4 +1,4 @@
-package jayslabs.webflux_sandbox.tradvsreactive02;
+package jayslabs.demo03;
 
 public record Product(
     Integer id, 
