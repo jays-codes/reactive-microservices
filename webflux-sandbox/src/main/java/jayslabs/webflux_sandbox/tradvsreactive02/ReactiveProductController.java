@@ -2,6 +2,7 @@ package jayslabs.webflux_sandbox.tradvsreactive02;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -21,6 +22,14 @@ public class ReactiveProductController {
 
     @GetMapping("products")
     public Flux<Product> getProducts() {
+        return this.webClient.get().uri("/demo01/products")
+        .retrieve()
+        .bodyToFlux(Product.class)
+        .doOnNext(product -> log.info("received response -> product: {}", product));
+    }
+
+    @GetMapping(value = "products/stream", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+    public Flux<Product> getProductsStream() {
         return this.webClient.get().uri("/demo01/products")
         .retrieve()
         .bodyToFlux(Product.class)
