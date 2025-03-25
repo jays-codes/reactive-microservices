@@ -22,17 +22,23 @@ public class ReactiveProductController {
 
     @GetMapping("products")
     public Flux<Product> getProducts() {
-        return this.webClient.get().uri("/demo01/products")
+        //original
+        //return this.webClient.get().uri("/demo01/products")
+        
+        //using notorious endpoint
+        return this.webClient.get().uri("/demo01/products/notorious")        
         .retrieve()
         .bodyToFlux(Product.class)
+        .onErrorComplete()
         .doOnNext(product -> log.info("received response -> product: {}", product));
     }
 
     @GetMapping(value = "products/stream", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
     public Flux<Product> getProductsStream() {
-        return this.webClient.get().uri("/demo01/products")
+        return this.webClient.get().uri("/demo01/products/notorious")
         .retrieve()
         .bodyToFlux(Product.class)
+        .onErrorComplete()
         .doOnNext(product -> log.info("received response -> product: {}", product));
     }
 }
