@@ -26,8 +26,8 @@ public class CustomerOrderRepoTest extends AbstractTest {
     }
 
     @Test
-    public void getCustomerOrdersByProductDescription() {
-        this.repo.getCustomerOrdersByProductDescription("mac pro")
+    public void getOrderDetailsByProductDescription() {
+        this.repo.getOrderDetailsByProductDescription("mac pro")
         .doOnNext(p -> log.info("{}", p))
         .as(StepVerifier::create)
         .expectNextCount(1)

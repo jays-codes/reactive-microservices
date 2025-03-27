@@ -41,5 +41,5 @@ public interface CustomerOrderRepository extends ReactiveCrudRepository<Customer
             p.description = :description
         ORDER BY co.amount DESC
         """)
-    Flux<OrderDetailsDTO> getCustomerOrdersByProductDescription(String description);
+    Flux<OrderDetailsDTO> getOrderDetailsByProductDescription(String description);
 }
