@@ -43,4 +43,16 @@ public class CustomerRepositoryTest extends AbstractTest {
         .assertNext(c -> Assertions.assertEquals(1, c.getId()))
         .verifyComplete();
     }
+
+    //Assignment21: find all customers whose email ends with ke@gmail.com
+    @Test
+    public void findByEmailEndingWith() {
+        this.custRepo.findByEmailEndingWith("ke@gmail.com")
+        .doOnNext(c -> log.info("{}", c))
+        .as(StepVerifier::create)
+        //check if the email ends with ke@gmail.com
+        .assertNext(c -> Assertions.assertTrue(c.getEmail().endsWith("ke@gmail.com")))
+        .assertNext(c -> Assertions.assertTrue(c.getEmail().endsWith("ke@gmail.com")))
+        .verifyComplete();
+    }
 }
