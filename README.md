@@ -2,7 +2,7 @@
 Jay's project/practice repo for Reactive Microservices : WebFlux + Project Reactor
 
 proj: webflux-sandbox
-- [BP] updated CustomerOrderRepository to add method for custom query: @Query, getProductsOrderedByCustomerName(name):Flux<Product>
+- [BP] updated CustomerOrderRepository to add method for custom query: @Query, getProductsOrderedByCustomerName(name):Flux<Product>; added CustomerOrderRepoTest, getProductsOrderedByCustomerName()
 - Created CustomerOrder entity: used UUID for Id, [BP] java.time.Instant for orderDate (timestamp); created <<CustomerOrderRepository>>; refactored repositories to add @Repository
 - Pagination in r2dbc: modified ProductRepository, added findAllBy(Pageable):Flux<Product>; added test findPageableAllBy - test to return page 1 with 3 items per pg: used PageRequest, Sort.by("price"), ascending()
 - done Assignment25: create <<ProductRepository>>, add findByPriceBetween(), create ProductRepositoryTest, create testFindByPriceBetween()
