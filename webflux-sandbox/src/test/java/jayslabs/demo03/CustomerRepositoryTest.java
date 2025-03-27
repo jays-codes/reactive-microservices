@@ -85,7 +85,24 @@ public class CustomerRepositoryTest extends AbstractTest {
         .expectNext(10L)
         .verifyComplete();
 
-        
-        
+    }
+
+    //test update customer
+    @Test
+    public void updateCustomerEmailByName() {
+        //find the customer by name
+        this.custRepo.findByName("ethan")
+        .doOnNext(c -> {
+            log.info("{}", c);
+            c.setEmail("anya@forger.com");
+        })
+        .flatMap(this.custRepo::save)
+        .doOnNext(c -> log.info("{}", c))
+        .as(StepVerifier::create)
+        .assertNext(c -> Assertions.assertEquals("anya@forger.com", c.getEmail()))
+        .verifyComplete();
+
+        //update the email
+
     }
 }
