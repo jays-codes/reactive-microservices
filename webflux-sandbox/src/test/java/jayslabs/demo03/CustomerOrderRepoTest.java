@@ -25,4 +25,12 @@ public class CustomerOrderRepoTest extends AbstractTest {
         .verifyComplete();
     }
 
+    @Test
+    public void getCustomerOrdersByProductDescription() {
+        this.repo.getCustomerOrdersByProductDescription("mac pro")
+        .doOnNext(p -> log.info("{}", p))
+        .as(StepVerifier::create)
+        .expectNextCount(1)
+        .verifyComplete();
+    }
 }
