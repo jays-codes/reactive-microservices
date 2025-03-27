@@ -1,10 +1,10 @@
 
 
-logging:
-  level:
-    org:
-      springframework:
-        r2dbc: TRACE
+# logging:
+#   level:
+#     org:
+#       springframework:
+#         r2dbc: TRACE
 
 server:
     port: 8080

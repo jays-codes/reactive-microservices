@@ -5,11 +5,13 @@ import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import jayslabs.demo03.entity.Customer;
 import jayslabs.demo03.repository.CustomerRepository;
 import reactor.test.StepVerifier;
 
+@SpringBootTest(properties = {"logging.level.org.springframework.r2dbc=INFO"})
 public class CustomerRepositoryTest extends AbstractTest {
     private static final Logger log = LoggerFactory.getLogger(CustomerRepositoryTest.class);
 

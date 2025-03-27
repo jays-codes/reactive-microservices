@@ -2,6 +2,7 @@
 Jay's project/practice repo for Reactive Microservices : WebFlux + Project Reactor
 
 proj: webflux-sandbox
+- tested setting logging level on app.yml and via @SpringBootTest property
 - created test to update; demo update logic: findByX(str), doOnNext(function to modify), flatMap(repo.save)
 - created test for Customer repo insert and delete: save(cust):Mono<Customer>, deleteById(id), count() 
 - Assignment21: Modified CustomerRepository to add custom query method: finByEmailEndingWith(str):Flux<Customer>, added test: findByEmailEndingWith()
