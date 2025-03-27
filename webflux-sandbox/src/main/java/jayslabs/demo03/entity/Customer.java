@@ -9,6 +9,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -18,7 +19,7 @@ import lombok.ToString;
 @ToString
 public class Customer {
 
-    @Id
+    @Id 
     private Integer id;
     private String name;
     private String email;

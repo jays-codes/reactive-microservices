@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import jayslabs.demo03.entity.Customer;
 import jayslabs.demo03.repository.CustomerRepository;
 import reactor.test.StepVerifier;
 
@@ -54,5 +55,37 @@ public class CustomerRepositoryTest extends AbstractTest {
         .assertNext(c -> Assertions.assertTrue(c.getEmail().endsWith("ke@gmail.com")))
         .assertNext(c -> Assertions.assertTrue(c.getEmail().endsWith("ke@gmail.com")))
         .verifyComplete();
+    }
+
+    //test insert customer
+    @Test
+    public void insertAndDeleteCustomer() {
+        var cust = new Customer();
+        cust.setName("anya");
+        cust.setEmail("anya@forger.com");
+        
+        this.custRepo.save(cust)
+        .doOnNext(c -> {
+            log.info("{}", c);
+        })
+        .as(StepVerifier::create)
+        .assertNext(c -> Assertions.assertNotNull(c.getId()))
+        .verifyComplete();
+
+        //count
+        this.custRepo.count()
+        .as(StepVerifier::create)
+        .expectNext(11L)
+        .verifyComplete();
+
+        //delete
+        this.custRepo.deleteById(cust.getId())
+        .then(this.custRepo.count())
+        .as(StepVerifier::create)
+        .expectNext(10L)
+        .verifyComplete();
+
+        
+        
     }
 }
