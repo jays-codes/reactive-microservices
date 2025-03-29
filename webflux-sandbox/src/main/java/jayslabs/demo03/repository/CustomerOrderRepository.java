@@ -26,6 +26,7 @@ public interface CustomerOrderRepository extends ReactiveCrudRepository<Customer
         """)
     Flux<Product> getProductsOrderedByCustomerName(String name);
 
+    //get order details by product description
     @Query("""
         SELECT 
             co.order_id,
