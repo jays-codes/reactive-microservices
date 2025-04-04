@@ -1,6 +1,11 @@
 # reactive-microservices
 Jay's project/practice repo for Reactive Microservices : WebFlux + Project Reactor
 
+proj: [BP][Template Quality] consumption-throughput-demo
+- created: parent mvn proj, pom, docker compose file, customer.sql, Makefile: 2 sub modules, reactive/traditional: customer entity, repository interfaces, 2x runners (CommandLineRunner - Efficiency/Throughput TestRunner), app.yml  
+- demo project to test R2DBC vs JPA on efficiency (bulk querying) and throughput (speed of query execution) on 10,000,000 records on postgresql (setup via docker)
+
+
 proj: webflux-sandbox
 - used DatabaseClient instead of r2dbc repo to execute custom sql: dbClient.sql(), bind(param, val), mapProperties(dto class), all() 
 - updated CustomerOrderRepo to add method to return DTO from three tables; added test getCustomerOrdersByProductDescription(desc)
