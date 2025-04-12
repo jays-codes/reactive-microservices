@@ -2,6 +2,7 @@
 Jay's project/practice repo for Reactive Microservices : WebFlux + Project Reactor
 
 proj: webflux-sandbox
+- created Customer Mapper: basic java class, MapStruct interface
 - created demo section for REST API with Webflux; created packages structure: controller; service, repository, dto, mapper, entity; CustomerDTO, Customer, <<CustomerRepository>>
 
 proj: [BP][Template Quality] consumption-throughput-demo
