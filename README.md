@@ -1,6 +1,9 @@
 # reactive-microservices
 Jay's project/practice repo for Reactive Microservices : WebFlux + Project Reactor
 
+proj: webflux-sandbox
+- created demo section for REST API with Webflux; created packages structure: controller; service, repository, dto, mapper, entity; CustomerDTO, Customer, <<CustomerRepository>>
+
 proj: [BP][Template Quality] consumption-throughput-demo
 - created: parent mvn proj, pom, docker compose file, customer.sql, Makefile: 2 sub modules, reactive/traditional: customer entity, repository interfaces, 2x runners (CommandLineRunner - Efficiency/Throughput TestRunner), app.yml  
 - demo project to test R2DBC vs JPA on efficiency (bulk querying) and throughput (speed of query execution) on 10,000,000 records on postgresql (setup via docker)
