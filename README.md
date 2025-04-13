@@ -2,6 +2,12 @@
 Jay's project/practice repo for Reactive Microservices : WebFlux + Project Reactor
 
 proj: webflux-sandbox
+- create <<ICustomerService>> and CustomerServiceImpl: 
+    - getAllCustomers():Flux<CustomerDTO>
+    - getCustomerById(Integer id):Mono<CustomerDTO>
+    - saveCustomer(Mono<CustomerDTO>):Mono<CusomterDTO>
+    - updateCustomer(Integer id, Mono<CustomerDTO> mono):Mono<CustomerDTO>
+    - deleteCustomer(Integer id):Mono<Void>
 - created Customer Mapper: basic java class, MapStruct interface
 - created demo section for REST API with Webflux; created packages structure: controller; service, repository, dto, mapper, entity; CustomerDTO, Customer, <<CustomerRepository>>
 
