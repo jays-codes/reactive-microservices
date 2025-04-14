@@ -1,5 +1,6 @@
 package jayslabs.section5.controller;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -29,11 +30,19 @@ public class CustomerController {
         return service.getAllCustomers();
     }
 
+    // @GetMapping("/{id}")
+    // public Mono<CustomerDTO> getCustomerById(@PathVariable Integer id) {
+    //     return service.getCustomerById(id);
+    // }
+
     @GetMapping("/{id}")
-    public Mono<CustomerDTO> getCustomerById(@PathVariable Integer id) {
-        return service.getCustomerById(id);
+    public Mono<ResponseEntity<CustomerDTO>> getCustomerById(@PathVariable Integer id) {
+        
+        return service.getCustomerById(id)
+            .map(ResponseEntity::ok) // .map(dto -> ResponseEntity.ok(dto))
+            .defaultIfEmpty(ResponseEntity.notFound().build());
     }
-    
+
     // @PostMapping
     // public Mono<CustomerDTO> saveCustomer(@RequestBody CustomerDTO customerDTO) {
     //     return service.saveCustomer(Mono.just(customerDTO));
@@ -50,8 +59,10 @@ public class CustomerController {
     // }
 
     @PutMapping("/{id}")
-    public Mono<CustomerDTO> updateCustomer(@PathVariable Integer id, @RequestBody Mono<CustomerDTO> monoCustDTO) {
-        return service.updateCustomer(id, monoCustDTO);
+    public Mono<ResponseEntity<CustomerDTO>> updateCustomer(@PathVariable Integer id, @RequestBody Mono<CustomerDTO> monoCustDTO) {
+        return service.updateCustomer(id, monoCustDTO)
+            .map(ResponseEntity::ok)
+            .defaultIfEmpty(ResponseEntity.notFound().build());
     }
 
 
