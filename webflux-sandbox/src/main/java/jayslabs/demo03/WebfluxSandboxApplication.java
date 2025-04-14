@@ -5,8 +5,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.data.r2dbc.repository.config.EnableR2dbcRepositories;
 
 
-@SpringBootApplication(scanBasePackages = {"jayslabs.demo${sec}"})
-@EnableR2dbcRepositories(basePackages = {"jayslabs.demo${sec}"})
+@SpringBootApplication(scanBasePackages = {"jayslabs.${sec}"})
+@EnableR2dbcRepositories(basePackages = {"jayslabs.${sec}"})
 public class WebfluxSandboxApplication {
 
 	public static void main(String[] args) {

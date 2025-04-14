@@ -11,8 +11,13 @@ import reactor.core.publisher.Mono;
 @Service
 public class CustomerServiceImpl implements ICustomerService {
 
-    private CustomerRepository repository;
-    private CustomerMapperMS mapper;
+    private final CustomerRepository repository;
+    private final CustomerMapperMS mapper;
+
+    public CustomerServiceImpl(CustomerRepository repository, CustomerMapperMS mapper) {
+        this.repository = repository;
+        this.mapper = mapper;
+    }
 
     public Flux<CustomerDTO> getAllCustomers() {
         return this.repository.findAll()
