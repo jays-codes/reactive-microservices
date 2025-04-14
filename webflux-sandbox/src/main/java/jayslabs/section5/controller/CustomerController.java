@@ -68,7 +68,13 @@ public class CustomerController {
 
     @DeleteMapping("/{id}")
     public Mono<ResponseEntity<Void>> deleteCustomer(@PathVariable Integer id) {
+        // return service.deleteCustomer(id)
+        //     .map(deleted -> deleted ? ResponseEntity.noContent().build() : ResponseEntity.notFound().build());
+
         return service.deleteCustomer(id)
-            .map(deleted -> deleted ? ResponseEntity.noContent().build() : ResponseEntity.notFound().build());
+            .filter(deleted -> deleted)
+            .map(deleted -> ResponseEntity.ok().<Void>build())
+            .defaultIfEmpty(ResponseEntity.notFound().build());
+
     }
 }

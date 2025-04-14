@@ -20,6 +20,7 @@ proj: [BP][Template Quality] consumption-throughput-demo
 
 
 proj: webflux-sandbox
+- modified deleteCustomer() api to return 200 and run map() only on successful repo delete
 - added Query method to repository to return Mono<Boolean> for deleteCustomer() and return 204 instead of 200 for successful delete; modified controller and service
 - used DatabaseClient instead of r2dbc repo to execute custom sql: dbClient.sql(), bind(param, val), mapProperties(dto class), all() 
 - updated CustomerOrderRepo to add method to return DTO from three tables; added test getCustomerOrdersByProductDescription(desc)
