@@ -2,6 +2,7 @@
 Jay's project/practice repo for Reactive Microservices : WebFlux + Project Reactor
 
 proj: webflux-sandbox
+- created controller tailored for reactive pipeline, with CRUD APIs. Take note of Mono<> in @RequestBody for saveCustomer() and updateCustomer()
 - create <<ICustomerService>> and CustomerServiceImpl: 
     - getAllCustomers():Flux<CustomerDTO>
     - getCustomerById(Integer id):Mono<CustomerDTO>

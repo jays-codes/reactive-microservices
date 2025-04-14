@@ -31,6 +31,14 @@ public class CustomerServiceImpl implements ICustomerService {
     }
 
     public Mono<CustomerDTO> updateCustomer(Integer id, Mono<CustomerDTO> mono) {
+        // option 3:
+        return repository.findById(id)
+            .flatMap(entity -> mono)
+            .map(mapper::toEntity)
+            .doOnNext(e -> e.setId(id))
+            .flatMap(repository::save)
+            .map(mapper::toDTO);
+        
         // option 1:
         // return mono.map(this.mapper::toEntity)
         //     .flatMap(e -> this.repository.findById(id)
@@ -44,15 +52,7 @@ public class CustomerServiceImpl implements ICustomerService {
         //         .doOnNext(e -> e.setId(c.getId()))
         //         .flatMap(this.repository::save)
         //         .map(this.mapper::toDTO));
-
-        // option 3:
-        return repository.findById(id)
-            .flatMap(entity -> mono)
-            .map(mapper::toEntity)
-            .doOnNext(e -> e.setId(id))
-            .flatMap(repository::save)
-            .map(mapper::toDTO);
-    }
+        }
 
     public Mono<Void> deleteCustomer(Integer id) {
         return this.repository.deleteById(id);
