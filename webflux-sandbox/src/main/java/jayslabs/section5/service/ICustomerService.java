@@ -12,5 +12,5 @@ public interface ICustomerService {
 
     Mono<CustomerDTO> updateCustomer(Integer id, Mono<CustomerDTO> customerDTO);
 
-    Mono<Void> deleteCustomer(Integer id);
+    Mono<Boolean> deleteCustomer(Integer id);
 }

@@ -59,7 +59,7 @@ public class CustomerServiceImpl implements ICustomerService {
         //         .map(this.mapper::toDTO));
         }
 
-    public Mono<Void> deleteCustomer(Integer id) {
-        return this.repository.deleteById(id);
+    public Mono<Boolean> deleteCustomer(Integer id) {
+        return this.repository.removeById(id);
     }
 }
