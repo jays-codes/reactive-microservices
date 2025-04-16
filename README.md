@@ -2,6 +2,10 @@
 Jay's project/practice repo for Reactive Microservices : WebFlux + Project Reactor
 
 proj: webflux-sandbox
+- created CustomerServiceTest: uses WebTestClient and test getAllUsers() api and getAllUsers paginated api
+- created paginated get API - uses @RequestParam for page and size; defined findBy() in <<Repository>> which uses Pageable. defined Service method which uses PageRequest.Of() 
+- modified deleteCustomer() api to return 200 and run map() only on successful repo delete
+- added Query method to repository to return Mono<Boolean> for deleteCustomer() and return 204 instead of 200 for successful delete; modified controller and service
 - [BP] updated APIs getCustomerById() and updateCustomer() to use ResponseEntity to return 404. modified return to Mono<ResponseEntity<CustomerDTO>>
 - fixed issue with autowiring: added missing mapstruct-processor to pom, constructor for repo and mapper in ServiceImpl
 - created controller tailored for reactive pipeline, with CRUD APIs. Take note of Mono<> in @RequestBody for saveCustomer() and updateCustomer()
@@ -20,9 +24,6 @@ proj: [BP][Template Quality] consumption-throughput-demo
 
 
 proj: webflux-sandbox
-- created paginated get API - uses @RequestParam for page and size; defined findBy() in <<Repository>> which uses Pageable. defined Service method which uses PageRequest.Of() 
-- modified deleteCustomer() api to return 200 and run map() only on successful repo delete
-- added Query method to repository to return Mono<Boolean> for deleteCustomer() and return 204 instead of 200 for successful delete; modified controller and service
 - used DatabaseClient instead of r2dbc repo to execute custom sql: dbClient.sql(), bind(param, val), mapProperties(dto class), all() 
 - updated CustomerOrderRepo to add method to return DTO from three tables; added test getCustomerOrdersByProductDescription(desc)
 - [BP] updated CustomerOrderRepository to add method for custom query: @Query, getProductsOrderedByCustomerName(name):Flux<Product>; added CustomerOrderRepoTest, getProductsOrderedByCustomerName()

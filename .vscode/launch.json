@@ -2,6 +2,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "WebfluxSandboxApplication",
+            "request": "launch",
+            "mainClass": "jayslabs.section5.WebfluxSandboxApplication",
+            "projectName": "webflux-sandbox"
+        },
+        {
+            "type": "java",
             "name": "Spring Boot-WebfluxSandboxApplication<webflux-sandbox>",
             "request": "launch",
             "cwd": "${workspaceFolder}",
