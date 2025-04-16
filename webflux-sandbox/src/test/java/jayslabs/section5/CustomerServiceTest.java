@@ -1,4 +1,4 @@
-package jayslabs.section5;
+package jayslabs.section6;
 
 import java.util.Objects;
 
@@ -11,10 +11,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.reactive.server.WebTestClient;
 
-import jayslabs.section5.dto.CustomerDTO;
+import jayslabs.section6.dto.CustomerDTO;
 
 @AutoConfigureWebTestClient
-@SpringBootTest(properties = "sec=section5")
+@SpringBootTest(properties = "sec=section6")
 public class CustomerServiceTest {
 
     private static final Logger log = LoggerFactory.getLogger(CustomerServiceTest.class);

@@ -2,6 +2,9 @@
 Jay's project/practice repo for Reactive Microservices : WebFlux + Project Reactor
 
 proj: webflux-sandbox
+- created new package(section6) for demoing Input Validation/Error Handling. Added package placeholders: advice, exceptions, validator
+
+proj: webflux-sandbox
 - added tests to CustomerServiceTest: validateCustomerNotFound() 404 using isNotFound() and 4xxClientError() for get,put,delete endpoints 
 - added tests to CustomerServiceTest: getCustomerById(), createCustomer(), deleteCustomer(), updateCustomer()
 - modified CustomerController - deleteCustomer API to return 204;
