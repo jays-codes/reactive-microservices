@@ -94,6 +94,27 @@ public class CustomerServiceTest {
         .jsonPath("$.id").isEqualTo(5)
         .jsonPath("$.name").isEqualTo("anya forger")
         .jsonPath("$.email").isEqualTo("anya.forger@ostania.com");
-    
+    }
+
+    //validate customer not found
+    @Test
+    public void validateCustomerNotFound() {
+        this.client.get().uri("/customers/100")
+        .exchange()
+        .expectStatus().isNotFound();
+
+        //delete
+        this.client.delete().uri("/customers/100")
+        .exchange()
+        .expectStatus().isNotFound();
+
+        //update
+        this.client.put().uri("/customers/100")
+        .bodyValue(new CustomerDTO(
+            null, "anya forger", "anya.forger@ostania.com"))
+        .exchange()
+        .expectStatus().is4xxClientError();
+
+        
     }
 }

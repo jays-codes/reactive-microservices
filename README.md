@@ -2,6 +2,7 @@
 Jay's project/practice repo for Reactive Microservices : WebFlux + Project Reactor
 
 proj: webflux-sandbox
+- added tests to CustomerServiceTest: validateCustomerNotFound() 404 using isNotFound() and 4xxClientError() for get,put,delete endpoints 
 - added tests to CustomerServiceTest: getCustomerById(), createCustomer(), deleteCustomer(), updateCustomer()
 - modified CustomerController - deleteCustomer API to return 204;
 - modified CustomerController - saveCustomer API to return 201;
