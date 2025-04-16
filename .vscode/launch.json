@@ -1,0 +1,14 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Spring Boot-WebfluxSandboxApplication<webflux-sandbox>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "jayslabs.demo03.WebfluxSandboxApplication",
+            "projectName": "webflux-sandbox",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        }
+    ]
+}

@@ -1,5 +1,6 @@
 package jayslabs.section5.service;
 
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import jayslabs.section5.dto.CustomerDTO;
@@ -17,6 +18,13 @@ public class CustomerServiceImpl implements ICustomerService {
     public CustomerServiceImpl(CustomerRepository repository, CustomerMapperMS mapper) {
         this.repository = repository;
         this.mapper = mapper;
+    }
+
+    public Flux<CustomerDTO> getAllCustomers(Integer page, Integer size) {
+        return 
+        //this.repository.findBy(Pageable.ofSize(size).withPage(page))
+        this.repository.findBy(PageRequest.of(page - 1, size))
+            .map(this.mapper::toDTO);
     }
 
     public Flux<CustomerDTO> getAllCustomers() {

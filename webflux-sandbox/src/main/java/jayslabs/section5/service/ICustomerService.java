@@ -6,6 +6,8 @@ import reactor.core.publisher.Mono;
 public interface ICustomerService {
     Flux<CustomerDTO> getAllCustomers();
 
+    Flux<CustomerDTO> getAllCustomers(Integer page, Integer size);
+
     Mono<CustomerDTO> getCustomerById(Integer id);
 
     Mono<CustomerDTO> saveCustomer(Mono<CustomerDTO> customerDTO);

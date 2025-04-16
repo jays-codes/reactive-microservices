@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import jayslabs.section5.dto.CustomerDTO;
@@ -28,6 +29,14 @@ public class CustomerController {
     @GetMapping
     public Flux<CustomerDTO> getAllCustomers() {
         return service.getAllCustomers();
+    }
+
+    //use RequestParam to get page and size
+    @GetMapping("paginated")
+    public Flux<CustomerDTO> getAllCustomers(
+        @RequestParam(defaultValue = "1") Integer page, 
+        @RequestParam(defaultValue = "3") Integer size) {
+            return service.getAllCustomers(page, size);
     }
 
     // @GetMapping("/{id}")
