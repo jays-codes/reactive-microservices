@@ -2,6 +2,10 @@
 Jay's project/practice repo for Reactive Microservices : WebFlux + Project Reactor
 
 proj: webflux-sandbox
+- added tests to CustomerServiceTest: getCustomerById(), createCustomer(), deleteCustomer(), updateCustomer()
+- modified CustomerController - deleteCustomer API to return 204;
+- modified CustomerController - saveCustomer API to return 201;
+- added getCustomerId test
 - created CustomerServiceTest: uses WebTestClient and test getAllUsers() api and getAllUsers paginated api
 - created paginated get API - uses @RequestParam for page and size; defined findBy() in <<Repository>> which uses Pageable. defined Service method which uses PageRequest.Of() 
 - modified deleteCustomer() api to return 200 and run map() only on successful repo delete

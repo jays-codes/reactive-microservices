@@ -1,5 +1,7 @@
 package jayslabs.section5;
 
+import java.util.Objects;
+
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,6 +41,59 @@ public class CustomerServiceTest {
         .expectBody()
         .jsonPath("$.length()").isEqualTo(3)
         .jsonPath("$[2].id").isEqualTo(3);
+    }
 
+    @Test
+    public void getCustomerById() {
+        this.client.get().uri("/customers/1")
+        .exchange()
+        .expectStatus().isOk()
+        .expectBody()
+        .jsonPath("$.id").isEqualTo(1)
+        .jsonPath("$.name").isEqualTo("sam");
+    }
+
+    @Test
+    public void createCustomer() {
+        CustomerDTO custDTO = new CustomerDTO(
+            null, "anya forger", "anya.forger@ostania.com");
+        this.client.post().uri("/customers")
+        .bodyValue(custDTO)
+        .exchange()
+        .expectStatus().isCreated()
+        .expectBody()
+        .consumeWith(r -> log.info("{}", 
+        new String(Objects.requireNonNull(r.getResponseBody()))))
+        .jsonPath("$.id").isEqualTo(11)
+        .jsonPath("$.name").isEqualTo("anya forger")
+        .jsonPath("$.email").isEqualTo("anya.forger@ostania.com");
+    }
+
+    //create and delete customer
+    @Test
+    public void deleteCustomer() {
+        createCustomer();
+        this.client.delete().uri("/customers/11")
+        .exchange()
+        .expectStatus().is2xxSuccessful()
+        .expectBody().isEmpty();
+    }
+
+    //update customer
+    @Test
+    public void updateCustomer() {
+        CustomerDTO custDTO = new CustomerDTO(
+            null, "anya forger", "anya.forger@ostania.com");
+        this.client.put().uri("/customers/5")
+        .bodyValue(custDTO)
+        .exchange()
+        .expectStatus().is2xxSuccessful()
+        .expectBody()
+        .consumeWith(r -> log.info("{}", 
+        new String(Objects.requireNonNull(r.getResponseBody()))))
+        .jsonPath("$.id").isEqualTo(5)
+        .jsonPath("$.name").isEqualTo("anya forger")
+        .jsonPath("$.email").isEqualTo("anya.forger@ostania.com");
+    
     }
 }

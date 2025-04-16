@@ -1,5 +1,7 @@
 package jayslabs.section5.controller;
 
+import java.net.URI;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -58,8 +60,10 @@ public class CustomerController {
     // }
 
     @PostMapping
-    public Mono<CustomerDTO> saveCustomer(@RequestBody Mono<CustomerDTO> monoCustDTO) {
-        return service.saveCustomer(monoCustDTO);
+    public Mono<ResponseEntity<CustomerDTO>> saveCustomer(@RequestBody Mono<CustomerDTO> monoCustDTO) {
+        return service.saveCustomer(monoCustDTO)
+            .map(dto -> ResponseEntity.created(URI.create("/customers/" + dto.id())).body(dto))
+            .defaultIfEmpty(ResponseEntity.notFound().build());
     }
 
     // @PutMapping("/{id}")
@@ -82,7 +86,8 @@ public class CustomerController {
 
         return service.deleteCustomer(id)
             .filter(deleted -> deleted)
-            .map(deleted -> ResponseEntity.ok().<Void>build())
+            //.map(deleted -> ResponseEntity.ok().<Void>build())
+            .map(deleted -> ResponseEntity.noContent().<Void>build())
             .defaultIfEmpty(ResponseEntity.notFound().build());
 
     }
