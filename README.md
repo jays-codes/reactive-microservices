@@ -1,6 +1,9 @@
 # reactive-microservices
 Jay's project/practice repo for Reactive Microservices : WebFlux + Project Reactor
 
+package jayslabs.core.practice:
+- HigherOrderFunctions class: wrote closure and callback functions; refer to HOF notes in core java notes
+
 proj: webflux-sandbox
 - created custom Exception types ext RuntimeException: CustomerNotFoundException and InvalidInputException; created factory class ApplicationExceptions, with factory methods returning Mono.error enclosing specific exception type mentioned
 - created new package(section6) for demoing Input Validation/Error Handling. Added package placeholders: advice, exceptions, validator
