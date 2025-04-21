@@ -59,7 +59,7 @@
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
-			<scope>provided</scope>
+			<optional>true</optional>
 		</dependency>
 		
 		<dependency>
@@ -97,6 +97,12 @@
 				<artifactId>spring-boot-maven-plugin</artifactId>
 
 				<configuration>
+					<excludes>
+						<exclude>
+						<groupId>org.projectlombok</groupId>
+						<artifactId>lombok</artifactId>
+						</exclude>
+					</excludes>
 					<annotationProcessorPaths>
 						<path>
 							<groupId>org.mapstruct</groupId>
@@ -104,8 +110,10 @@
 							<version>1.6.0.Beta1</version>
 						</path>
 					</annotationProcessorPaths>
+					
 				</configuration>
 			</plugin>
+
 		</plugins>
 	</build>
 

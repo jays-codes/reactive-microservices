@@ -4,7 +4,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import jayslabs.section6.dto.CustomerDTO;
-import jayslabs.section6.mapper.CustomerMapperMS;
+import jayslabs.section6.mapper.CustomerMapper;
 import jayslabs.section6.repository.CustomerRepository;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -13,13 +13,14 @@ import reactor.core.publisher.Mono;
 public class CustomerServiceImpl implements ICustomerService {
 
     private final CustomerRepository repository;
-    private final CustomerMapperMS mapper;
+    private final CustomerMapper mapper;
 
-    public CustomerServiceImpl(CustomerRepository repository, CustomerMapperMS mapper) {
+    public CustomerServiceImpl(CustomerRepository repository, CustomerMapper mapper) {
         this.repository = repository;
         this.mapper = mapper;
     }
 
+    @Override
     public Flux<CustomerDTO> getAllCustomers(Integer page, Integer size) {
         return 
         //this.repository.findBy(Pageable.ofSize(size).withPage(page))
@@ -27,22 +28,26 @@ public class CustomerServiceImpl implements ICustomerService {
             .map(this.mapper::toDTO);
     }
 
+    @Override
     public Flux<CustomerDTO> getAllCustomers() {
         return this.repository.findAll()
             .map(this.mapper::toDTO);
     }
 
+    @Override
     public Mono<CustomerDTO> getCustomerById(Integer id) {
         return this.repository.findById(id)
             .map(this.mapper::toDTO);
     }
 
+    @Override
     public Mono<CustomerDTO> saveCustomer(Mono<CustomerDTO> mono) {
         return mono.map(this.mapper::toEntity)
             .flatMap(this.repository::save)
             .map(this.mapper::toDTO);
     }
 
+    @Override
     public Mono<CustomerDTO> updateCustomer(Integer id, Mono<CustomerDTO> mono) {
         // option 3:
         return repository.findById(id)
@@ -67,6 +72,7 @@ public class CustomerServiceImpl implements ICustomerService {
         //         .map(this.mapper::toDTO));
         }
 
+    @Override
     public Mono<Boolean> deleteCustomer(Integer id) {
         return this.repository.removeById(id);
     }
