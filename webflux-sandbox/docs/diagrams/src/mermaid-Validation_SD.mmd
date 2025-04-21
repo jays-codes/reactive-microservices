@@ -1,0 +1,41 @@
+sequenceDiagram
+    actor Client
+    participant Controller as CustomerController
+    participant Validator as RequestValidator
+    participant Exceptions as ApplicationExceptions
+    participant Service as ICustomerService
+    
+    Client->>Controller: PUT /customers/{id}
+    Note over Client: JSON Request Body
+    
+    Controller->>Controller: updateCustomer(id, monoCustDTO)
+    
+    Controller->>Validator: transform(validate())
+    
+    Validator->>Validator: mono.filter(hasName())
+    
+    alt Name is null
+        Validator-->>Exceptions: missingName()
+        Exceptions-->>Controller: Mono.error(InvalidInputException)
+    else Name is not null
+        Validator->>Validator: filter(hasValidEmail())
+        
+        alt Email is invalid
+            Validator-->>Exceptions: missingEmail()
+            Exceptions-->>Controller: Mono.error(InvalidInputException)
+        else Email is valid
+            Validator-->>Controller: Mono<ValidatedCustomerDTO>
+        end
+    end
+    
+    Controller->>Service: updateCustomer(id, validReq)
+    
+    alt Customer not found
+        Service-->>Controller: Mono.empty()
+        Controller->>Exceptions: customerNotFound(id)
+        Exceptions-->>Controller: Mono.error(CustomerNotFoundException)
+    else Customer found and updated
+        Service-->>Controller: Mono<UpdatedCustomerDTO>
+    end
+    
+    Controller-->>Client: Response

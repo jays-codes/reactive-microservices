@@ -1,12 +1,14 @@
 # reactive-microservices
 Jay's project/practice repo for Reactive Microservices : WebFlux + Project Reactor
 
-package jayslabs.core.practice:
-- HigherOrderFunctions class: wrote closure and callback functions; refer to HOF notes in core java notes
-
 proj: webflux-sandbox
+- included sequence diagrams (plantuml/mermaid) for saveCustomer(), updateCustomer() validation flow. note: please use plantuml or mermaid preview plugin or app to view.
+- created RequestValidator which encapsulate validation logic and throws approriate Error monos. CustomerController.update()/save() (note: request body) invokes transform() on Mono<dto> using RequestValidator as an arg, transform() ultimately returns an error mono or dto mono.
 - created custom Exception types ext RuntimeException: CustomerNotFoundException and InvalidInputException; created factory class ApplicationExceptions, with factory methods returning Mono.error enclosing specific exception type mentioned
 - created new package(section6) for demoing Input Validation/Error Handling. Added package placeholders: advice, exceptions, validator
+
+package jayslabs.core.practice:
+- HigherOrderFunctions class: wrote closure and callback functions; refer to HOF notes in core java notes
 
 proj: webflux-sandbox
 - added tests to CustomerServiceTest: validateCustomerNotFound() 404 using isNotFound() and 4xxClientError() for get,put,delete endpoints 

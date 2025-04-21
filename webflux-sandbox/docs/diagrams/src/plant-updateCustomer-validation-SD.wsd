@@ -1,0 +1,66 @@
+@startuml Update Customer Validation Flow
+
+actor Client
+participant "CustomerController" as Controller
+participant "RequestValidator" as Validator
+participant "ApplicationExceptions" as Exceptions
+participant "ICustomerService" as Service
+
+Client -> Controller: PUT /customers/{id} with CustomerDTO
+activate Controller
+
+Controller -> Controller: updateCustomer(id, Mono<CustomerDTO>)
+activate Controller #DarkSalmon
+
+Controller -> Validator: transform(RequestValidator.validate())
+activate Validator
+
+Validator -> Validator: mono.filter(hasName())
+note right: Checks if name is not null
+
+alt Name is null
+    Validator -> Exceptions: missingName()
+    activate Exceptions
+    Exceptions --> Validator: Mono.error(InvalidInputException)
+    deactivate Exceptions
+    Validator --> Controller: Error Mono
+else Name is not null
+    Validator -> Validator: filter(hasValidEmail())
+    note right: Checks if email is not null and contains @
+    
+    alt Email is invalid
+        Validator -> Exceptions: missingEmail()
+        activate Exceptions
+        Exceptions --> Validator: Mono.error(InvalidInputException)
+        deactivate Exceptions
+        Validator --> Controller: Error Mono
+    else Email is valid
+        Validator --> Controller: Valid CustomerDTO Mono
+    end
+end
+
+deactivate Validator
+
+Controller -> Controller: as(validReq -> service.updateCustomer(id, validReq))
+note right: Passes validated CustomerDTO to service
+
+Controller -> Service: updateCustomer(id, validReq)
+activate Service
+
+alt Customer not found
+    Service --> Controller: Mono.empty()
+    Controller -> Exceptions: customerNotFound(id)
+    activate Exceptions
+    Exceptions --> Controller: Mono.error(CustomerNotFoundException)
+    deactivate Exceptions
+else Customer found and updated
+    Service --> Controller: Mono<UpdatedCustomerDTO>
+end
+
+deactivate Service
+
+Controller --> Client: HTTP response with CustomerDTO or error
+deactivate Controller #DarkSalmon
+deactivate Controller
+
+@enduml

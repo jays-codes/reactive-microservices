@@ -1,0 +1,42 @@
+@startuml
+actor Client
+participant CustomerController
+participant RequestValidator
+participant ApplicationExceptions
+participant ICustomerService
+
+Client -> CustomerController: PUT /customers/{id}
+note over Client: JSON Request Body
+
+CustomerController -> CustomerController: updateCustomer(id, monoCustDTO)
+
+CustomerController -> RequestValidator: transform(validate())
+
+RequestValidator -> RequestValidator: mono.filter(hasName())
+
+alt Name is null
+    RequestValidator --> ApplicationExceptions: missingName()
+    ApplicationExceptions --> CustomerController: Mono.error(InvalidInputException)
+else Name is not null
+    RequestValidator -> RequestValidator: filter(hasValidEmail())
+    
+    alt Email is invalid
+        RequestValidator --> ApplicationExceptions: missingEmail()
+        ApplicationExceptions --> CustomerController: Mono.error(InvalidInputException)
+    else Email is valid
+        RequestValidator --> CustomerController: Mono<ValidatedCustomerDTO>
+    end
+end
+
+CustomerController -> ICustomerService: updateCustomer(id, validReq)
+
+alt Customer not found
+    ICustomerService --> CustomerController: Mono.empty()
+    CustomerController -> ApplicationExceptions: customerNotFound(id)
+    ApplicationExceptions --> CustomerController: Mono.error(CustomerNotFoundException)
+else Customer found and updated
+    ICustomerService --> CustomerController: Mono<UpdatedCustomerDTO>
+end
+
+CustomerController --> Client: Response
+@enduml
