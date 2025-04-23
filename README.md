@@ -2,6 +2,7 @@
 Jay's project/practice repo for Reactive Microservices : WebFlux + Project Reactor
 
 proj: webflux-sandbox
+- Added ExceptionHandler (@ControllerAdvice), added handleException()s (@ExceptionHandler) for CustomerNotFoundException/InvalidInputException.class; modified classes to remove lombok references
 - included sequence diagrams (plantuml/mermaid) for saveCustomer(), updateCustomer() validation flow. note: please use plantuml or mermaid preview plugin or app to view.
 - created RequestValidator which encapsulate validation logic and throws approriate Error monos. CustomerController.update()/save() (note: request body) invokes transform() on Mono<dto> using RequestValidator as an arg, transform() ultimately returns an error mono or dto mono.
 - created custom Exception types ext RuntimeException: CustomerNotFoundException and InvalidInputException; created factory class ApplicationExceptions, with factory methods returning Mono.error enclosing specific exception type mentioned

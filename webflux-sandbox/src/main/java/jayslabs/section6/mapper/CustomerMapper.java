@@ -13,7 +13,7 @@ import jayslabs.section6.entity.Customer;
 
 public class CustomerMapper {
 
-    public Customer toEntity(CustomerDTO dto){
+    public static Customer toEntity(CustomerDTO dto){
         var customer = new Customer();
         customer.setName(dto.name());
         customer.setEmail(dto.email());
@@ -21,7 +21,7 @@ public class CustomerMapper {
         return customer;
     }
 
-    public CustomerDTO toDTO(Customer customer){
+    public static CustomerDTO toDTO(Customer customer){
         return new CustomerDTO(
                 customer.getId(),
                 customer.getName(),

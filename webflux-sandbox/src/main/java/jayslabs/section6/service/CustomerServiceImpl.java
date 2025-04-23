@@ -13,11 +13,13 @@ import reactor.core.publisher.Mono;
 public class CustomerServiceImpl implements ICustomerService {
 
     private final CustomerRepository repository;
-    private final CustomerMapper mapper;
+    //private final CustomerMapper mapper;
 
-    public CustomerServiceImpl(CustomerRepository repository, CustomerMapper mapper) {
+    public CustomerServiceImpl(CustomerRepository repository
+    //, CustomerMapper mapper
+    ) {
         this.repository = repository;
-        this.mapper = mapper;
+        //this.mapper = mapper;
     }
 
     @Override
@@ -25,26 +27,26 @@ public class CustomerServiceImpl implements ICustomerService {
         return 
         //this.repository.findBy(Pageable.ofSize(size).withPage(page))
         this.repository.findBy(PageRequest.of(page - 1, size))
-            .map(this.mapper::toDTO);
+            .map(CustomerMapper::toDTO);
     }
 
     @Override
     public Flux<CustomerDTO> getAllCustomers() {
         return this.repository.findAll()
-            .map(this.mapper::toDTO);
+            .map(CustomerMapper::toDTO);
     }
 
     @Override
     public Mono<CustomerDTO> getCustomerById(Integer id) {
         return this.repository.findById(id)
-            .map(this.mapper::toDTO);
+            .map(CustomerMapper::toDTO);
     }
 
     @Override
     public Mono<CustomerDTO> saveCustomer(Mono<CustomerDTO> mono) {
-        return mono.map(this.mapper::toEntity)
+        return mono.map(CustomerMapper::toEntity)
             .flatMap(this.repository::save)
-            .map(this.mapper::toDTO);
+            .map(CustomerMapper::toDTO);
     }
 
     @Override
@@ -52,10 +54,10 @@ public class CustomerServiceImpl implements ICustomerService {
         // option 3:
         return repository.findById(id)
             .flatMap(entity -> mono)
-            .map(mapper::toEntity)
+            .map(CustomerMapper::toEntity)
             .doOnNext(e -> e.setId(id))
             .flatMap(repository::save)
-            .map(mapper::toDTO);
+            .map(CustomerMapper::toDTO);
         
         // option 1:
         // return mono.map(this.mapper::toEntity)
