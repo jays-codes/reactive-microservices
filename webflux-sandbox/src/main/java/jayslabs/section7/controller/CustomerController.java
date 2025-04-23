@@ -16,6 +16,8 @@ import jayslabs.section7.service.ICustomerService;
 import jayslabs.section7.validator.RequestValidator;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+import jayslabs.section7.filter.Category;
+import org.springframework.web.bind.annotation.RequestAttribute;
 
 @RestController
 @RequestMapping("/customers")
@@ -28,7 +30,8 @@ public class CustomerController {
     }
 
     @GetMapping
-    public Flux<CustomerDTO> getAllCustomers() {
+    public Flux<CustomerDTO> getAllCustomers(@RequestAttribute Category category) {
+        System.out.println("category: " + category);
         return service.getAllCustomers();
     }
 

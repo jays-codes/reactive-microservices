@@ -11,7 +11,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.core.annotation.Order;
 
 @Component
-@Order(1)
 public class WebFilterDemo2 implements WebFilter {
 
     private static final Logger log = LoggerFactory.getLogger(WebFilterDemo2.class);
