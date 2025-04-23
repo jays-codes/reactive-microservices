@@ -2,6 +2,7 @@
 Jay's project/practice repo for Reactive Microservices : WebFlux + Project Reactor
 
 proj: webflux-sandbox
+- Added CustomerServiceTest for section6 to test modifications to error handling
 - modified sequence diagram for update and save customer flows
 - Added ExceptionHandler (@ControllerAdvice), added handleException()s (@ExceptionHandler) for CustomerNotFoundException/InvalidInputException.class; modified classes to remove lombok references
 - included sequence diagrams (plantuml/mermaid) for saveCustomer(), updateCustomer() validation flow. note: please use plantuml or mermaid preview plugin or app to view.
