@@ -4,6 +4,7 @@ actor Client
 participant "CustomerController" as Controller
 participant "RequestValidator" as Validator
 participant "ApplicationExceptions" as Exceptions
+participant "ApplicationExceptionHandler" as ExceptionHandler
 
 Client -> Controller: POST /customers with CustomerDTO
 activate Controller
@@ -23,6 +24,10 @@ alt Name is null
     Exceptions --> Validator: Mono.error(InvalidInputException)
     deactivate Exceptions
     Validator --> Controller: Error Mono
+    Controller --> ExceptionHandler: InvalidInputException thrown
+    activate ExceptionHandler
+    ExceptionHandler --> Client: HTTP 400 with ProblemDetail
+    deactivate ExceptionHandler
 else Name is not null
     Validator -> Validator: filter(hasValidEmail())
     note right: Checks if email is not null and contains @
@@ -33,17 +38,19 @@ else Name is not null
         Exceptions --> Validator: Mono.error(InvalidInputException)
         deactivate Exceptions
         Validator --> Controller: Error Mono
+        Controller --> ExceptionHandler: InvalidInputException thrown
+        activate ExceptionHandler
+        ExceptionHandler --> Client: HTTP 400 with ProblemDetail
+        deactivate ExceptionHandler
     else Email is valid
         Validator --> Controller: Valid CustomerDTO Mono
+        Controller -> Controller: as(service::saveCustomer)
+        note right: Passes validated CustomerDTO to service
+        Controller --> Client: HTTP response with CustomerDTO
     end
 end
 
 deactivate Validator
-
-Controller -> Controller: as(service::saveCustomer)
-note right: Passes validated CustomerDTO to service
-
-Controller --> Client: HTTP response with CustomerDTO or error
 deactivate Controller #DarkSalmon
 deactivate Controller
 

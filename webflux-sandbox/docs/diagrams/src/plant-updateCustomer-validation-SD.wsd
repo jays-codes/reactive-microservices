@@ -5,6 +5,7 @@ participant "CustomerController" as Controller
 participant "RequestValidator" as Validator
 participant "ApplicationExceptions" as Exceptions
 participant "ICustomerService" as Service
+participant "ApplicationExceptionHandler" as ExceptionHandler
 
 Client -> Controller: PUT /customers/{id} with CustomerDTO
 activate Controller
@@ -24,6 +25,10 @@ alt Name is null
     Exceptions --> Validator: Mono.error(InvalidInputException)
     deactivate Exceptions
     Validator --> Controller: Error Mono
+    Controller --> ExceptionHandler: InvalidInputException thrown
+    activate ExceptionHandler
+    ExceptionHandler --> Client: HTTP 400 with ProblemDetail
+    deactivate ExceptionHandler
 else Name is not null
     Validator -> Validator: filter(hasValidEmail())
     note right: Checks if email is not null and contains @
@@ -34,32 +39,39 @@ else Name is not null
         Exceptions --> Validator: Mono.error(InvalidInputException)
         deactivate Exceptions
         Validator --> Controller: Error Mono
+        Controller --> ExceptionHandler: InvalidInputException thrown
+        activate ExceptionHandler
+        ExceptionHandler --> Client: HTTP 400 with ProblemDetail
+        deactivate ExceptionHandler
     else Email is valid
         Validator --> Controller: Valid CustomerDTO Mono
+        
+        Controller -> Controller: as(validReq -> service.updateCustomer(id, validReq))
+        note right: Passes validated CustomerDTO to service
+
+        Controller -> Service: updateCustomer(id, validReq)
+        activate Service
+
+        alt Customer not found
+            Service --> Controller: Mono.empty()
+            Controller -> Exceptions: customerNotFound(id)
+            activate Exceptions
+            Exceptions --> Controller: Mono.error(CustomerNotFoundException)
+            deactivate Exceptions
+            Controller --> ExceptionHandler: CustomerNotFoundException thrown
+            activate ExceptionHandler
+            ExceptionHandler --> Client: HTTP 404 with ProblemDetail
+            deactivate ExceptionHandler
+        else Customer found and updated
+            Service --> Controller: Mono<UpdatedCustomerDTO>
+            Controller --> Client: HTTP response with CustomerDTO
+        end
+
+        deactivate Service
     end
 end
 
 deactivate Validator
-
-Controller -> Controller: as(validReq -> service.updateCustomer(id, validReq))
-note right: Passes validated CustomerDTO to service
-
-Controller -> Service: updateCustomer(id, validReq)
-activate Service
-
-alt Customer not found
-    Service --> Controller: Mono.empty()
-    Controller -> Exceptions: customerNotFound(id)
-    activate Exceptions
-    Exceptions --> Controller: Mono.error(CustomerNotFoundException)
-    deactivate Exceptions
-else Customer found and updated
-    Service --> Controller: Mono<UpdatedCustomerDTO>
-end
-
-deactivate Service
-
-Controller --> Client: HTTP response with CustomerDTO or error
 deactivate Controller #DarkSalmon
 deactivate Controller
 
