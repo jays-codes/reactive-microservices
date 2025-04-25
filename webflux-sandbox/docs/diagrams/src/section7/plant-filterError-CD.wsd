@@ -1,0 +1,99 @@
+@startuml Filter Error Handling Class Diagram
+
+package "Filter Layer" {
+    interface WebFilter {
+        +filter(exchange: ServerWebExchange, chain: WebFilterChain): Mono<Void>
+    }
+
+    class AuthenticationWebFilter {
+        -filterErrorHandler: FilterErrorHandler
+        -TOKEN_CATEGORY_MAP: Map<String, Category>
+        +filter(exchange: ServerWebExchange, chain: WebFilterChain): Mono<Void>
+    }
+
+    class AuthorizationWebFilter {
+        -filterErrorHandler: FilterErrorHandler
+        +filter(exchange: ServerWebExchange, chain: WebFilterChain): Mono<Void>
+        -prime(exchange: ServerWebExchange, chain: WebFilterChain): Mono<Void>
+        -standard(exchange: ServerWebExchange, chain: WebFilterChain): Mono<Void>
+    }
+
+    class FilterErrorHandler {
+        -codecConfigurer: ServerCodecConfigurer
+        -context: ServerResponse.Context
+        +init(): void
+        +sendProblemDetail(exchange: ServerWebExchange, status: HttpStatus, message: String): Mono<Void>
+    }
+
+    class "FilterErrorHandler.ContextImpl" as ContextImpl << record >> {
+        -codecConfigurer: ServerCodecConfigurer
+        +messageWriters(): List<HttpMessageWriter<?>>
+        +viewResolvers(): List<ViewResolver>
+    }
+
+    enum Category {
+        STANDARD
+        PRIME
+    }
+}
+
+package "Exception Handling" {
+    class ApplicationExceptionHandler {
+        +handleException(ex: CustomerNotFoundException): ProblemDetail
+        +handleException(ex: InvalidInputException): ProblemDetail
+    }
+
+    class CustomerNotFoundException {
+        +CustomerNotFoundException(message: String)
+    }
+
+    class InvalidInputException {
+        +InvalidInputException(message: String)
+    }
+
+    class ProblemDetail {
+        +forStatusAndDetail(status: HttpStatus, detail: String): ProblemDetail
+        +setType(type: URI): void
+        +setTitle(title: String): void
+    }
+}
+
+package "Spring Framework" {
+    interface ServerWebExchange {
+        +getRequest(): ServerHttpRequest
+        +getResponse(): ServerHttpResponse
+        +getAttributes(): Map<String, Object>
+    }
+
+    interface WebFilterChain {
+        +filter(exchange: ServerWebExchange): Mono<Void>
+    }
+
+    interface "ServerResponse$Context" as ServerResponseContext {
+        +messageWriters(): List<HttpMessageWriter<?>>
+        +viewResolvers(): List<ViewResolver>
+    }
+
+    interface ServerResponse {
+        +status(status: HttpStatus): BodyBuilder
+        +bodyValue(body: Object): Mono<ServerResponse>
+        +writeTo(exchange: ServerWebExchange, context: Context): Mono<Void>
+    }
+}
+
+' Relationships
+WebFilter <|.. AuthenticationWebFilter
+WebFilter <|.. AuthorizationWebFilter
+AuthenticationWebFilter --> FilterErrorHandler : uses
+AuthorizationWebFilter --> FilterErrorHandler : uses
+AuthenticationWebFilter --> Category : uses
+FilterErrorHandler --> "FilterErrorHandler.ContextImpl" : creates
+"FilterErrorHandler.ContextImpl" ..|> ServerResponseContext
+FilterErrorHandler ..> ProblemDetail : creates
+FilterErrorHandler ..> ServerResponse : uses
+
+ApplicationExceptionHandler ..> ProblemDetail : creates
+ApplicationExceptionHandler ..> CustomerNotFoundException : handles
+ApplicationExceptionHandler ..> InvalidInputException : handles
+
+@enduml 

@@ -1,13 +1,14 @@
 package jayslabs.section7.advice;
 
+import java.net.URI;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ProblemDetail;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import jayslabs.section7.exceptions.CustomerNotFoundException;
 import jayslabs.section7.exceptions.InvalidInputException;
-import org.springframework.http.ProblemDetail;
-import org.springframework.http.HttpStatus;
-import java.net.URI;
 
 @ControllerAdvice
 public class ApplicationExceptionHandler {

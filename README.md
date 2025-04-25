@@ -2,6 +2,8 @@
 Jay's project/practice repo for Reactive Microservices : WebFlux + Project Reactor
 
 proj: webflux-sandbox
+- created FilterErrorHandler to handle errors thrown from WebFilter returning ProblemDetail wrapped in a Mono<Void>. WebFilters call handler's, sendProblemDetail() to do return
+- created UML diagrams for section 7: class diagram and sequence diagram for filter behavior 
 - modified controller getAll() to get category via @RequestAttribute
 - created AuthorizationWebFilter, retrieved category via exchange.getAttributeOrDefault(), provide method handler for enum category values, do a switch in filter() calling appropriate method handler for case representing enum bategory val; modified AuthenticationWebFilter to save category as an attribute
 - created AuthenticationWebFilter that checks for auth-token (determines access) in header; extracted token from header via exchange.getRequest().getHeaders().getFirst(); setStatusCode in response via exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED); reorganized uml diagrams

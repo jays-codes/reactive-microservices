@@ -1,0 +1,119 @@
+@startuml Filter Error Handling Flow
+
+actor Client
+participant "AuthenticationWebFilter" as AuthFilter
+participant "AuthorizationWebFilter" as AuthzFilter
+participant "FilterErrorHandler" as ErrorHandler
+participant "CustomerController" as Controller
+participant "ICustomerService" as Service
+participant "ApplicationExceptionHandler" as ExHandler
+
+== Authentication Failure Scenario ==
+
+Client -> AuthFilter: Request GET /customers or PUT /customers/{id}
+activate AuthFilter
+
+AuthFilter -> AuthFilter: Check auth-token header
+note right: token is missing or invalid
+
+AuthFilter -> ErrorHandler: sendProblemDetail(exchange, UNAUTHORIZED, "Invalid token")
+activate ErrorHandler
+
+ErrorHandler -> ErrorHandler: Create ProblemDetail
+ErrorHandler -> Client: HTTP 401 Unauthorized with ProblemDetail
+deactivate ErrorHandler
+deactivate AuthFilter
+
+== Authorization Failure Scenario - Standard User ==
+
+Client -> AuthFilter: Request PUT /customers/{id}
+activate AuthFilter
+note right: token "secret123" for STANDARD user
+
+AuthFilter -> AuthFilter: Validate token
+AuthFilter -> AuthFilter: Set "category" attribute to STANDARD
+AuthFilter -> AuthzFilter: Pass request
+deactivate AuthFilter
+activate AuthzFilter
+
+AuthzFilter -> AuthzFilter: Check category and HTTP method
+note right: non-GET request with STANDARD category
+
+AuthzFilter -> ErrorHandler: sendProblemDetail(exchange, FORBIDDEN, "Standard users only GET")
+activate ErrorHandler
+
+ErrorHandler -> ErrorHandler: Create ProblemDetail
+ErrorHandler -> Client: HTTP 403 Forbidden with ProblemDetail
+deactivate ErrorHandler
+deactivate AuthzFilter
+
+== Success - GET /customers with STANDARD user ==
+
+Client -> AuthFilter: GET /customers with token "secret123"
+activate AuthFilter
+
+AuthFilter -> AuthFilter: Validate token
+AuthFilter -> AuthFilter: Set "category" attribute to STANDARD
+AuthFilter -> AuthzFilter: Pass request
+deactivate AuthFilter
+activate AuthzFilter
+
+AuthzFilter -> AuthzFilter: Check category and HTTP method
+note right: GET is permitted for STANDARD
+
+AuthzFilter -> Controller: Pass request
+deactivate AuthzFilter
+activate Controller
+
+Controller -> Service: getAllCustomers()
+activate Service
+Service --> Controller: Flux<CustomerDTO>
+deactivate Service
+
+Controller --> Client: HTTP 200 with CustomerDTOs
+deactivate Controller
+
+== Success - PUT /customers/{id} with PRIME user ==
+
+Client -> AuthFilter: PUT /customers/{id} with token "secret456"
+activate AuthFilter
+
+AuthFilter -> AuthFilter: Validate token
+AuthFilter -> AuthFilter: Set "category" attribute to PRIME
+AuthFilter -> AuthzFilter: Pass request
+deactivate AuthFilter
+activate AuthzFilter
+
+AuthzFilter -> AuthzFilter: Check category and HTTP method
+note right: PRIME users can do all operations
+
+AuthzFilter -> Controller: Pass request
+deactivate AuthzFilter
+activate Controller
+
+Controller -> Controller: Validate CustomerDTO
+alt Invalid Input (missing name or email)
+    Controller -> ExHandler: throw InvalidInputException
+    activate ExHandler
+    ExHandler --> Client: HTTP 400 Bad Request with ProblemDetail
+    deactivate ExHandler
+    deactivate Controller
+else Valid Input
+    Controller -> Service: updateCustomer(id, validDTO)
+    activate Service
+    
+    alt Customer Not Found
+        Service --> Controller: Mono.empty()
+        Controller -> ExHandler: throw CustomerNotFoundException
+        activate ExHandler
+        ExHandler --> Client: HTTP 404 Not Found with ProblemDetail
+        deactivate ExHandler
+    else Success
+        Service --> Controller: Mono<UpdatedCustomerDTO>
+        Controller --> Client: HTTP 200 with CustomerDTO
+    end
+    deactivate Service
+    deactivate Controller
+end
+
+@enduml 
