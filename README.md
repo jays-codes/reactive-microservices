@@ -2,6 +2,8 @@
 Jay's project/practice repo for Reactive Microservices : WebFlux + Project Reactor
 
 proj: webflux-sandbox
+- Created RouterConfiguration, implemented route mappings for endpoints - customerRoutes():RouterFunction<ServerResponse>, each route mapping is a map of endpoint url and respective handler method
+- created UML diagram for section 8: class diagram and sequence diagram centered on RouterConfiguration and CustomerRequestHandler
 - created CustomerRequestHandler, implemented handler methods returning Mono<ServerResponse>. called Service using inputs from ServerRequest
 - created RouterConfiguration, CustomerHandler.getAllCustomers()
 - added section8 package set for Functional Endpoints study

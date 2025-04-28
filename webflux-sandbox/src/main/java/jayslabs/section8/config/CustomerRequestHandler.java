@@ -27,6 +27,21 @@ public class CustomerRequestHandler {
                 CustomerDTO.class));
     }
 
+    //paginated version of getAllCustomers
+    public Mono<ServerResponse> getAllCustomersPaginated(ServerRequest request){
+        var page = request.queryParam("page")
+        .map(Integer::parseInt)
+        .orElse(1);
+        var size = request.queryParam("size")
+        .map(Integer::parseInt)
+        .orElse(3);
+        
+        return service.getAllCustomers(page, size)
+        .as(
+            flux -> ServerResponse.ok().body(flux, CustomerDTO.class));
+    }
+    
+    //get customer by id
     public Mono<ServerResponse> getCustomerById(ServerRequest request){
         var id = Integer.parseInt(request.pathVariable("id"));
         return service.getCustomerById(id)

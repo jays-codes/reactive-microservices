@@ -1,0 +1,92 @@
+@startuml CustomerRequestHandler Class Diagram
+
+package "Handler Layer" {
+    class CustomerRequestHandler {
+        -service: ICustomerService
+        +CustomerRequestHandler(service: ICustomerService)
+        +getAllCustomers(request: ServerRequest): Mono<ServerResponse>
+        +getAllCustomersPaginated(request: ServerRequest): Mono<ServerResponse>
+        +getCustomerById(request: ServerRequest): Mono<ServerResponse>
+        +saveCustomer(request: ServerRequest): Mono<ServerResponse>
+        +updateCustomer(request: ServerRequest): Mono<ServerResponse>
+        +deleteCustomer(request: ServerRequest): Mono<ServerResponse>
+    }
+}
+
+package "Configuration Layer" {
+    class RouterConfiguration {
+        -handler: CustomerRequestHandler
+        +RouterConfiguration(handler: CustomerRequestHandler)
+        +customerRoutes(): RouterFunction<ServerResponse>
+    }
+}
+
+package "Service Layer" {
+    interface ICustomerService {
+        +getAllCustomers(): Flux<CustomerDTO>
+        +getAllCustomers(page: Integer, size: Integer): Flux<CustomerDTO>
+        +getCustomerById(id: Integer): Mono<CustomerDTO>
+        +saveCustomer(customer: Mono<CustomerDTO>): Mono<CustomerDTO>
+        +updateCustomer(id: Integer, customer: Mono<CustomerDTO>): Mono<CustomerDTO>
+        +deleteCustomer(id: Integer): Mono<Boolean>
+    }
+}
+
+package "DTO Layer" {
+    class CustomerDTO {
+        -id: Integer
+        -name: String
+        -email: String
+    }
+}
+
+package "Validation Layer" {
+    class RequestValidator {
+        +validate(): Function<Mono<CustomerDTO>, Mono<CustomerDTO>>
+    }
+}
+
+package "Exception Layer" {
+    class ApplicationExceptions {
+        +customerNotFound(id: Integer): Mono<CustomerDTO>
+    }
+}
+
+package "Spring Framework" {
+    interface ServerRequest {
+        +pathVariable(name: String): String
+        +bodyToMono(type: Class<T>): Mono<T>
+        +queryParam(name: String): Optional<String>
+    }
+
+    interface ServerResponse {
+        +ok(): BodyBuilder
+        +noContent(): BodyBuilder
+        +body(flux: Flux<T>, type: Class<T>): Mono<ServerResponse>
+        +bodyValue(value: T): Mono<ServerResponse>
+        +build(): Mono<ServerResponse>
+    }
+
+    interface RouterFunction<T> {
+        +route(): RouterFunctions.Builder
+    }
+
+    class RouterFunctions {
+        +route(): RouterFunctions.Builder
+    }
+}
+
+' Relationships
+RouterConfiguration --> CustomerRequestHandler : uses
+CustomerRequestHandler --> ICustomerService : uses
+CustomerRequestHandler --> RequestValidator : uses
+CustomerRequestHandler --> ApplicationExceptions : uses
+CustomerRequestHandler ..> ServerRequest : processes
+CustomerRequestHandler ..> ServerResponse : creates
+ICustomerService ..> CustomerDTO : returns
+RequestValidator ..> CustomerDTO : validates
+ApplicationExceptions ..> CustomerDTO : returns
+RouterConfiguration ..> RouterFunction : creates
+RouterConfiguration ..> RouterFunctions : uses
+
+@enduml 

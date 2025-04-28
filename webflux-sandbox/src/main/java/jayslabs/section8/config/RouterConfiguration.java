@@ -18,10 +18,12 @@ public class RouterConfiguration {
     @Bean
     public RouterFunction<ServerResponse> customerRoutes(){
         return RouterFunctions.route()
-        .GET("/customers", request -> {
-            return handler.getAllCustomers(request);
-        })
-        
+        .GET("/customers", handler::getAllCustomers)
+        .GET("/customers/{id}", handler::getCustomerById)
+        .GET("/customers/paginated", handler::getAllCustomersPaginated)
+        .POST("/customers", handler::saveCustomer)
+        .PUT("/customers/{id}", handler::updateCustomer)
+        .DELETE("/customers/{id}", handler::deleteCustomer)
         .build();
     }
 }
