@@ -2,6 +2,7 @@
 Jay's project/practice repo for Reactive Microservices : WebFlux + Project Reactor
 
 proj: webflux-sandbox
+- created CustomerRequestHandler, implemented handler methods returning Mono<ServerResponse>. called Service using inputs from ServerRequest
 - created RouterConfiguration, CustomerHandler.getAllCustomers()
 - added section8 package set for Functional Endpoints study
 - added section7.CustomerServiceTest to test stamdard amd prime category and HttpStatus: OK 200, FORBIDDEN 403, UNAUTHORIZED 401

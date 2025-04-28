@@ -9,12 +9,19 @@ import org.springframework.web.reactive.function.server.RouterFunctions;
 @Configuration
 public class RouterConfiguration {
 
+    private final CustomerRequestHandler handler;
+
+    public RouterConfiguration(CustomerRequestHandler handler){
+        this.handler = handler;
+    }
+
     @Bean
     public RouterFunction<ServerResponse> customerRoutes(){
         return RouterFunctions.route()
         .GET("/customers", request -> {
-            return ServerResponse.ok().body(CustomerService.findAll());
+            return handler.getAllCustomers(request);
         })
+        
         .build();
     }
 }

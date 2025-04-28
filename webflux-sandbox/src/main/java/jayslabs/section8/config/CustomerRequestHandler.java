@@ -5,23 +5,57 @@ import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
 
 import jayslabs.section8.dto.CustomerDTO;
+import jayslabs.section8.exceptions.ApplicationExceptions;
 import jayslabs.section8.service.ICustomerService;
+import jayslabs.section8.validator.RequestValidator;
 import reactor.core.publisher.Mono;
 
 @Service
 public class CustomerRequestHandler {
 
-    private ICustomerService srvc;
+    private final ICustomerService service;
 
-    public CustomerRequestHandler(ICustomerService srvc){
-        this.srvc = srvc;
+    public CustomerRequestHandler(ICustomerService service){
+        this.service = service;
     }
 
     public Mono<ServerResponse> getAllCustomers(ServerRequest request){
-        return srvc.getAllCustomers()
+        return service.getAllCustomers()
         .as(
             flux -> ServerResponse.ok().body(
                 flux,
                 CustomerDTO.class));
+    }
+
+    public Mono<ServerResponse> getCustomerById(ServerRequest request){
+        var id = Integer.parseInt(request.pathVariable("id"));
+        return service.getCustomerById(id)
+        .switchIfEmpty(ApplicationExceptions.customerNotFound(id))
+        .flatMap(ServerResponse.ok()::bodyValue);
+    }
+
+    public Mono<ServerResponse> saveCustomer(ServerRequest request){
+        return request.bodyToMono(CustomerDTO.class)
+        .transform(RequestValidator.validate())
+        .as(service::saveCustomer)
+        .flatMap(ServerResponse.ok()::bodyValue);
+    }
+
+    public Mono<ServerResponse> updateCustomer(ServerRequest request){
+        var id = Integer.parseInt(request.pathVariable("id"));
+        
+        return request.bodyToMono(CustomerDTO.class)
+        .transform(RequestValidator.validate())
+        .as(validReq -> service.updateCustomer(id, validReq))
+        .switchIfEmpty(ApplicationExceptions.customerNotFound(id))
+        .flatMap(ServerResponse.ok()::bodyValue);
+    }
+
+    public Mono<ServerResponse> deleteCustomer(ServerRequest request){
+        var id = Integer.parseInt(request.pathVariable("id"));
+        return service.deleteCustomer(id)
+        .filter(deleted -> deleted)
+        .switchIfEmpty(ApplicationExceptions.customerNotFound(id))
+        .then(ServerResponse.noContent().build());
     }
 }
