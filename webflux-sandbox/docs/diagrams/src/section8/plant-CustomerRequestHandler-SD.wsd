@@ -6,6 +6,7 @@ participant "CustomerRequestHandler" as Handler
 participant "RequestValidator" as Validator
 participant "ICustomerService" as Service
 participant "ApplicationExceptions" as Exceptions
+participant "ApplicationExceptionHandler" as ExceptionHandler
 
 == GET /customers ==
 Client -> Router: GET /customers
@@ -19,31 +20,54 @@ Router --> Client: 200 OK with customers
 Client -> Router: POST /customers
 Router -> Handler: saveCustomer(request)
 Handler -> Handler: bodyToMono(CustomerDTO)
-Handler -> Validator: validate()
-Validator --> Handler: Mono<CustomerDTO>
-Handler -> Service: saveCustomer(validatedCustomer)
-Service --> Handler: Mono<CustomerDTO>
-Handler --> Router: Mono<ServerResponse>
-Router --> Client: 200 OK with saved customer
+alt Valid Input
+    Handler -> Validator: validate()
+    Validator --> Handler: Mono<CustomerDTO>
+    Handler -> Service: saveCustomer(validatedCustomer)
+    Service --> Handler: Mono<CustomerDTO>
+    Handler --> Router: Mono<ServerResponse>
+    Router --> Client: 200 OK with saved customer
+else Invalid Input
+    Handler -> Validator: validate()
+    Validator --> Handler: Mono.error(InvalidInputException)
+    Handler --> Router: Mono.error(InvalidInputException)
+    Router -> ExceptionHandler: handleException(InvalidInputException)
+    ExceptionHandler -> ExceptionHandler: create ProblemDetail
+    ExceptionHandler --> Router: Mono<ServerResponse>
+    Router --> Client: 400 Bad Request with ProblemDetail
+end
 
 == PUT /customers/{id} ==
 Client -> Router: PUT /customers/{id}
 Router -> Handler: updateCustomer(request)
 Handler -> Handler: parse id from path
 Handler -> Handler: bodyToMono(CustomerDTO)
-Handler -> Validator: validate()
-Validator --> Handler: Mono<CustomerDTO>
-Handler -> Service: updateCustomer(id, validatedCustomer)
-alt Customer Found
-    Service --> Handler: Mono<CustomerDTO>
-    Handler --> Router: Mono<ServerResponse>
-    Router --> Client: 200 OK with updated customer
-else Customer Not Found
-    Service --> Handler: Mono.empty()
-    Handler -> Exceptions: customerNotFound(id)
-    Exceptions --> Handler: Mono.error()
-    Handler --> Router: Mono<ServerResponse>
-    Router --> Client: 404 Not Found
+alt Valid Input
+    Handler -> Validator: validate()
+    Validator --> Handler: Mono<CustomerDTO>
+    Handler -> Service: updateCustomer(id, validatedCustomer)
+    alt Customer Found
+        Service --> Handler: Mono<CustomerDTO>
+        Handler --> Router: Mono<ServerResponse>
+        Router --> Client: 200 OK with updated customer
+    else Customer Not Found
+        Service --> Handler: Mono.empty()
+        Handler -> Exceptions: customerNotFound(id)
+        Exceptions --> Handler: Mono.error(CustomerNotFoundException)
+        Handler --> Router: Mono.error(CustomerNotFoundException)
+        Router -> ExceptionHandler: handleException(CustomerNotFoundException)
+        ExceptionHandler -> ExceptionHandler: create ProblemDetail
+        ExceptionHandler --> Router: Mono<ServerResponse>
+        Router --> Client: 404 Not Found with ProblemDetail
+    end
+else Invalid Input
+    Handler -> Validator: validate()
+    Validator --> Handler: Mono.error(InvalidInputException)
+    Handler --> Router: Mono.error(InvalidInputException)
+    Router -> ExceptionHandler: handleException(InvalidInputException)
+    ExceptionHandler -> ExceptionHandler: create ProblemDetail
+    ExceptionHandler --> Router: Mono<ServerResponse>
+    Router --> Client: 400 Bad Request with ProblemDetail
 end
 
 @enduml 

@@ -11,12 +11,19 @@ package "Handler Layer" {
         +updateCustomer(request: ServerRequest): Mono<ServerResponse>
         +deleteCustomer(request: ServerRequest): Mono<ServerResponse>
     }
+
+    class ApplicationExceptionHandler {
+        +handleException(CustomerNotFoundException, ServerRequest): Mono<ServerResponse>
+        +handleException(InvalidInputException, ServerRequest): Mono<ServerResponse>
+        -handleException(HttpStatus, Exception, ServerRequest, Consumer<ProblemDetail>): Mono<ServerResponse>
+    }
 }
 
 package "Configuration Layer" {
     class RouterConfiguration {
         -handler: CustomerRequestHandler
-        +RouterConfiguration(handler: CustomerRequestHandler)
+        -exceptionHandler: ApplicationExceptionHandler
+        +RouterConfiguration(handler: CustomerRequestHandler, exceptionHandler: ApplicationExceptionHandler)
         +customerRoutes(): RouterFunction<ServerResponse>
     }
 }
@@ -50,6 +57,14 @@ package "Exception Layer" {
     class ApplicationExceptions {
         +customerNotFound(id: Integer): Mono<CustomerDTO>
     }
+
+    class CustomerNotFoundException {
+        +CustomerNotFoundException(id: Integer)
+    }
+
+    class InvalidInputException {
+        +InvalidInputException(message: String)
+    }
 }
 
 package "Spring Framework" {
@@ -74,10 +89,18 @@ package "Spring Framework" {
     class RouterFunctions {
         +route(): RouterFunctions.Builder
     }
+
+    class ProblemDetail {
+        +forStatusAndDetail(status: HttpStatus, detail: String): ProblemDetail
+        +setType(type: URI): void
+        +setTitle(title: String): void
+        +setInstance(instance: URI): void
+    }
 }
 
 ' Relationships
 RouterConfiguration --> CustomerRequestHandler : uses
+RouterConfiguration --> ApplicationExceptionHandler : uses
 CustomerRequestHandler --> ICustomerService : uses
 CustomerRequestHandler --> RequestValidator : uses
 CustomerRequestHandler --> ApplicationExceptions : uses
@@ -88,5 +111,9 @@ RequestValidator ..> CustomerDTO : validates
 ApplicationExceptions ..> CustomerDTO : returns
 RouterConfiguration ..> RouterFunction : creates
 RouterConfiguration ..> RouterFunctions : uses
+ApplicationExceptionHandler ..> ProblemDetail : creates
+ApplicationExceptionHandler ..> CustomerNotFoundException : handles
+ApplicationExceptionHandler ..> InvalidInputException : handles
+ApplicationExceptionHandler ..> ServerResponse : creates
 
 @enduml 

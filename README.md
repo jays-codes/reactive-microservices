@@ -2,6 +2,8 @@
 Jay's project/practice repo for Reactive Microservices : WebFlux + Project Reactor
 
 proj: webflux-sandbox
+- created UML sequence and class diagrams to include error handling structure and flow
+- Created ApplicationExceptionHandler (@Service), handleException() for each exception type; wire handler to RouterConfiguration, used onError() and chained for each exception type. Take note of [BP] using high-order functions encapsulating common handleException() logic.
 - Created RouterConfiguration, implemented route mappings for endpoints - customerRoutes():RouterFunction<ServerResponse>, each route mapping is a map of endpoint url and respective handler method
 - created UML diagram for section 8: class diagram and sequence diagram centered on RouterConfiguration and CustomerRequestHandler
 - created CustomerRequestHandler, implemented handler methods returning Mono<ServerResponse>. called Service using inputs from ServerRequest
