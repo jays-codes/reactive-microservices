@@ -2,6 +2,7 @@
 Jay's project/practice repo for Reactive Microservices : WebFlux + Project Reactor
 
 proj: webflux-sandbox
+- modified order of route for "GET /customers/{id}", and "GET /customers/paginated" to prevent calling the 1st GET when paginated GET is expected
 - modified handler getAllCustomersPaginated() to return complete collection instead of stream as is appropriate with pagination
 - created UML sequence and class diagrams to include error handling structure and flow
 - Created ApplicationExceptionHandler (@Service), handleException() for each exception type; wire handler to RouterConfiguration, used onError() and chained for each exception type. Take note of [BP] using high-order functions encapsulating common handleException() logic.
