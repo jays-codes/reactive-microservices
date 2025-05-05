@@ -37,8 +37,12 @@ public class CustomerRequestHandler {
         .orElse(3);
         
         return service.getAllCustomers(page, size)
-        .as(
-            flux -> ServerResponse.ok().body(flux, CustomerDTO.class));
+        // .as(
+        //     flux -> ServerResponse.ok().body(
+        //         flux, CustomerDTO.class));
+        
+        .collectList() // collect all items into a list -> Mono<List<CustomerDTO>>
+        .flatMap(ServerResponse.ok()::bodyValue);
     }
     
     //get customer by id
