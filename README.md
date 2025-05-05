@@ -2,6 +2,7 @@
 Jay's project/practice repo for Reactive Microservices : WebFlux + Project Reactor
 
 proj: webflux-sandbox
+- modified RouterConfiguration to nest route functions, use path()
 - modified order of route for "GET /customers/{id}", and "GET /customers/paginated" to prevent calling the 1st GET when paginated GET is expected
 - modified handler getAllCustomersPaginated() to return complete collection instead of stream as is appropriate with pagination
 - created UML sequence and class diagrams to include error handling structure and flow
