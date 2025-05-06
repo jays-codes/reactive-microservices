@@ -1,4 +1,4 @@
-package jayslabs.section8.filter;
+package jayslabs.section9.filter;
 
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
@@ -10,7 +10,8 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 
 import reactor.core.publisher.Mono;
-import jayslabs.section8.filter.FilterErrorHandler;
+import jayslabs.section9.filter.FilterErrorHandler;
+import jayslabs.section9.filter.Category;
 import org.springframework.beans.factory.annotation.Autowired;
 
 @Service

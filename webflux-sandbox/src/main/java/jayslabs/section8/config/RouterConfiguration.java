@@ -40,6 +40,15 @@ public class RouterConfiguration {
         .path("/customers", this::customerRoutes)
         .onError(CustomerNotFoundException.class, exceptionHandler::handleException)
         .onError(InvalidInputException.class, exceptionHandler::handleException)
+        
+        //filter
+        // .filter((request,next)-> {
+        //     return ServerResponse.badRequest().build();
+        // })
+        // .filter((request,next)-> {
+        //     return next.handle(request);
+        // })
+
         .build();
     }
 
