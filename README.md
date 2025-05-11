@@ -2,9 +2,10 @@
 Jay's project/practice repo for Reactive Microservices : WebFlux + Project Reactor
 
 proj: webflux-sandbox
+- created Section09StreamTest - process streaming response from external service endpoint; used bodyToFlux()
 - Section09MonoTest: added concurrentRequest() (lecturers code) and provided my improved alternative [BP] concurrentRequestsTest using Flux.range(), flatMap(function), getProduct(id):Mono<ProductDTO> - execute concurrent requests
 - created test Section09MonoTest to connect to external service via AbstractWebClient. tested GET /lec01/product/{id}, retrieved a Mono<ProductDTO>; created ProductDTO record to capture response data from external service
-- created section9 package in src/test/java; created AbstractWebClient: WebClient, createWebClient(consumer<>):WebClient, createWebClient():WebClient, print():<T> Consumer<T>
+- created section9 package in src/test/java; created AbstractWebClient: WebClient, createWebClient(consumer<>):WebClient, createWebClient():WebClient, print():<T> Consumer<T>; ensure external service (docker) is running
 - answered assignment #92: [BP] on use of higher order functions to write RouterFunctions and Handlers; used RequestPredicate, used other impl of RouterFunctions.route().GET()
 - created RouterFunction Filters: filter()
 - modified RouterConfiguration to nest route functions, use path()

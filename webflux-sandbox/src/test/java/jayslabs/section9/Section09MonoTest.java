@@ -42,19 +42,19 @@ public class Section09MonoTest extends AbstractWebClient{
             .doOnNext(print());
     }
 
-    @Test
-    public void concurrentRequests() throws InterruptedException{
-        for (int i = 1; i <= 100; i++){
-            this.client.get()
-            .uri("/lec01/product/{id}", i)
-            .retrieve()
-            .bodyToMono(ProductDTO.class)
-            .doOnNext(print())
-            .subscribe();
-        }
+    // @Test
+    // public void concurrentRequests() throws InterruptedException{
+    //     for (int i = 1; i <= 100; i++){
+    //         this.client.get()
+    //         .uri("/lec01/product/{id}", i)
+    //         .retrieve()
+    //         .bodyToMono(ProductDTO.class)
+    //         .doOnNext(print())
+    //         .subscribe();
+    //     }
 
-        Thread.sleep(Duration.ofSeconds(2));
-    }
+    //     Thread.sleep(Duration.ofSeconds(2));
+    // }
 
     @Test
     public void concurrentRequestsTestWithParallel() throws InterruptedException{
