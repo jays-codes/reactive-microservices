@@ -2,6 +2,7 @@
 Jay's project/practice repo for Reactive Microservices : WebFlux + Project Reactor
 
 proj: webflux-sandbox
+- created test Section09MonoTest to connect to external service via AbstractWebClient. tested GET /lec01/product/{id}, retrieved a Mono<ProductDTO>; created ProductDTO record to capture response data from external service
 - created section9 package in src/test/java; created AbstractWebClient: WebClient, createWebClient(consumer<>):WebClient, createWebClient():WebClient, print():<T> Consumer<T>
 - answered assignment #92: [BP] on use of higher order functions to write RouterFunctions and Handlers; used RequestPredicate, used other impl of RouterFunctions.route().GET()
 - created RouterFunction Filters: filter()
