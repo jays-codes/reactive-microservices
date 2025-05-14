@@ -2,6 +2,7 @@
 Jay's project/practice repo for Reactive Microservices : WebFlux + Project Reactor
 
 proj: webflux-sandbox
+- Section09BearerAuthTest - for sending request requiring bearer token; call defaultHeaders(consumer), setBearerAuth()
 - Section09BasicAuthTest - for sending request requiring basic auth in header; call createWebClient(consumer) calling defaultHeaders(consumer), setBasicAuth()
 - Section09QueryParamTest - for sending HTTP requests having query params; used UriBuilder (w/variables and [BP] with Map) - uri(), .path(), .query(), build(10,5,"+"), build(map)
 - [BP] Section09ErrorHandlingTest: exchangeTest() using .exchangeToMono(this::decode), custom eval logic of ClientResponse
