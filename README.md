@@ -2,6 +2,7 @@
 Jay's project/practice repo for Reactive Microservices : WebFlux + Project Reactor
 
 proj: webflux-sandbox
+- Section09QueryParamTest - for sending HTTP requests having query params; used UriBuilder (w/variables and [BP] with Map) - uri(), .path(), .query(), build(10,5,"+"), build(map)
 - [BP] Section09ErrorHandlingTest: exchangeTest() using .exchangeToMono(this::decode), custom eval logic of ClientResponse
 - [BP] created Section09ErrorHandlingTest; doOnError(Ex, consumer) to log exception in ProblemDetail format via ex.getResponseBodyAs(), onErrorReturn(WebClientResponseException, obj) for error recovery returning obj appropriate for given WCRException Type: InternalServerError, BadRequest
 - created Section09HeaderTest - request requiring header values. WebClient.Builder.defaultHeader() - set via factory method of WebClient impl, .header(), .headers(consumer) (h->h.setAll(map))
