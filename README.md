@@ -2,6 +2,7 @@
 Jay's project/practice repo for Reactive Microservices : WebFlux + Project Reactor
 
 proj: webflux-sandbox
+- Section09AssignmentLoggingFilter - created separate logging filter to log request info; added new filter to filter chain call
 - [BP] Section09ExchangeFilterTest - generate token for each request sent; used ExchangeFilterFunction, tokenGenerator():ExchangeFilterFunction, ClientRequest.from(), ExchangeFunction.exchange(), filter(ExchangeFilterFunction):Builder
 - Section09BearerAuthTest - for sending request requiring bearer token; call defaultHeaders(consumer), setBearerAuth()
 - Section09BasicAuthTest - for sending request requiring basic auth in header; call createWebClient(consumer) calling defaultHeaders(consumer), setBasicAuth()

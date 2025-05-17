@@ -13,11 +13,13 @@ import jayslabs.section9.dto.ProductDTO;
 import reactor.core.publisher.Flux;
 import reactor.test.StepVerifier;
 
-public class Section09ExchangeFilterTest extends AbstractWebClient {
+public class Section09AssignmentLoggingFilter extends AbstractWebClient {
 
-    private static final Logger log = LoggerFactory.getLogger(Section09ExchangeFilterTest.class);
+    private static final Logger log = LoggerFactory.getLogger(Section09AssignmentLoggingFilter.class);
 
-    private final WebClient client = createWebClient(b -> b.filter(tokenGenerator()));
+    private final WebClient client = createWebClient(
+        b -> b.filter(tokenGenerator())
+        .filter(loggingFilter()));
         
     @Test
     void testExchangeFilter() {
@@ -43,6 +45,17 @@ public class Section09ExchangeFilterTest extends AbstractWebClient {
             //req.headers().setBearerAuth(token);
             var modifiedRequest = ClientRequest.from(req).headers(h -> h.setBearerAuth(token)).build();
             return next.exchange(modifiedRequest);
+        };
+    }
+
+    //create a filter that logs the HTTP, method, URL, bearer token
+    private ExchangeFilterFunction loggingFilter() {
+        return (req, next) -> {
+            log.info("HTTP method: {}", req.method());
+            log.info("URI: {}", req.url());
+            log.info("Headers: {}", req.headers());
+            log.info("Bearer Token: {}", req.headers().get("Authorization").get(0));
+            return next.exchange(req);
         };
     }
 }
