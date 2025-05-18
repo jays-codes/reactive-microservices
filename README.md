@@ -2,6 +2,11 @@
 Jay's project/practice repo for Reactive Microservices : WebFlux + Project Reactor
 
 proj: webflux-sandbox
+
+- Streaming - Uploading million Products
+- Created section10 pkg; created pkgs dto, entity, mapper, repository; create Product entity, ProductDTO record, Mapper, ProductRepository; enabled lombok; created ProductService class (Interface and Impl) with saveProducts(Flux<ProductDTO>):Flux<ProductDTO> and getProductsCount():Mono<Long> 
+
+- WebClient - Non-Blocking HTTP Client
 - modified LoggingFilter to execute only given the value of an attribute (ClientRequest.attributes()),
 attribute set in call to WebClient via RequestHeader.attribute(); calls logging only for even Id numbers passed in request
 - Section09AssignmentLoggingFilter - created separate logging filter to log request info; added new filter to filter chain call
@@ -17,6 +22,8 @@ attribute set in call to WebClient via RequestHeader.attribute(); calls logging 
 - Section09MonoTest: added concurrentRequest() (lecturers code) and provided my improved alternative [BP] concurrentRequestsTest using Flux.range(), flatMap(function), getProduct(id):Mono<ProductDTO> - execute concurrent requests
 - created test Section09MonoTest to connect to external service via AbstractWebClient. tested GET /lec01/product/{id}, retrieved a Mono<ProductDTO>; created ProductDTO record to capture response data from external service
 - created section9 package in src/test/java; created AbstractWebClient [for demo02 endpoints - ensure external service is running]: WebClient, createWebClient(consumer<>):WebClient, createWebClient():WebClient, print():<T> Consumer<T>; ensure external service (docker) is running
+
+- Functional Endpoints
 - answered assignment #92: [BP] on use of higher order functions to write RouterFunctions and Handlers; used RequestPredicate, used other impl of RouterFunctions.route().GET()
 - created RouterFunction Filters: filter()
 - modified RouterConfiguration to nest route functions, use path()
@@ -29,6 +36,8 @@ attribute set in call to WebClient via RequestHeader.attribute(); calls logging 
 - created CustomerRequestHandler, implemented handler methods returning Mono<ServerResponse>. called Service using inputs from ServerRequest
 - created RouterConfiguration, CustomerHandler.getAllCustomers()
 - added section8 package set for Functional Endpoints study
+
+- WebFilter
 - added section7.CustomerServiceTest to test stamdard amd prime category and HttpStatus: OK 200, FORBIDDEN 403, UNAUTHORIZED 401
 - created FilterErrorHandler to handle errors thrown from WebFilter returning ProblemDetail wrapped in a Mono<Void>. WebFilters call handler's, sendProblemDetail() to do return
 - created UML diagrams for section 7: class diagram and sequence diagram for filter behavior 
@@ -36,6 +45,8 @@ attribute set in call to WebClient via RequestHeader.attribute(); calls logging 
 - created AuthorizationWebFilter, retrieved category via exchange.getAttributeOrDefault(), provide method handler for enum category values, do a switch in filter() calling appropriate method handler for case representing enum bategory val; modified AuthenticationWebFilter to save category as an attribute
 - created AuthenticationWebFilter that checks for auth-token (determines access) in header; extracted token from header via exchange.getRequest().getHeaders().getFirst(); setStatusCode in response via exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED); reorganized uml diagrams
 - Added package section6 for integrating filters; created 2 x classes implementing <<WebFilter>>, used filter(), @Order
+
+- Input Validation and Error Handling
 - Added CustomerServiceTest for section6 to test modifications to error handling
 - modified sequence diagram for update and save customer flows
 - Added ExceptionHandler (@ControllerAdvice), added handleException()s (@ExceptionHandler) for CustomerNotFoundException/InvalidInputException.class; modified classes to remove lombok references
