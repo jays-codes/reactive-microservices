@@ -4,6 +4,7 @@ Jay's project/practice repo for Reactive Microservices : WebFlux + Project React
 proj: webflux-sandbox
 
 - Streaming - Uploading million Products
+- Created ProductClient in src/test/java, defined WebClient reference, uploadProducts() to call appropriate service endpoint. Set .contentType(MediaType.APPLICATION_NDJSON)
 - Created UploadResponseDTO; ProductController using NDJSON format (MediaType.APPLICATION_NDJSON_VALUE), uploadProducts() post endpoint method
 - Created section10 pkg; created pkgs dto, entity, mapper, repository; create Product entity, ProductDTO record, Mapper, ProductRepository; enabled lombok; created ProductService class (Interface and Impl) with saveProducts(Flux<ProductDTO>):Flux<ProductDTO> and getProductsCount():Mono<Long> 
 
