@@ -25,6 +25,7 @@ public class ProductServiceImpl implements ProductService {
         // .map(EntityDTOMapper::toDTO);
     }
 
+    @Override
     public Mono<Long> getProductsCount() {
         return this.repo.count();
     }

@@ -1,0 +1,30 @@
+@startuml Products Upload Sequence
+
+actor Tester as ProductsUploadDownloadTest
+participant "ProductClient" as Client
+participant "ProductController" as Controller
+participant "ProductServiceImpl" as Service
+participant "ProductRepository" as Repository
+
+Tester -> Client: uploadProducts(flux)
+activate Client
+Client -> Controller: POST /products/upload (NDJSON)
+activate Controller
+Controller -> Controller: log.info("invoked: ProductController.uploadProducts()")
+Controller -> Service: saveProducts(products)
+activate Service
+Service -> Repository: saveAll(map(EntityDTOMapper::toEntity))
+activate Repository
+Repository --> Service: Flux<Product>
+Service -> Service: map(EntityDTOMapper::toDTO)
+Service --> Controller: Flux<ProductDTO>
+Controller -> Service: getProductsCount()
+Service -> Repository: count()
+Repository --> Service: Mono<Long>
+Service --> Controller: Mono<Long>
+Controller -> Controller: new UploadResponseDTO(UUID, count)
+Controller --> Client: Mono<UploadResponseDTO>
+Client -> Client: log.info("received: {}", response)
+Client --> Tester: complete
+
+@enduml 
