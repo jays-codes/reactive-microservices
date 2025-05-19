@@ -17,12 +17,12 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public Flux<ProductDTO> saveProducts(Flux<ProductDTO> flux) {
-        // return this.repo.saveAll(flux.map(EntityDTOMapper::toEntity))
-        // .map(EntityDTOMapper::toDTO);
-
-        return flux.map(EntityDTOMapper::toEntity)
-        .as(this.repo::saveAll)
+        return this.repo.saveAll(flux.map(EntityDTOMapper::toEntity))
         .map(EntityDTOMapper::toDTO);
+
+        // return flux.map(EntityDTOMapper::toEntity)
+        // .as(this.repo::saveAll)
+        // .map(EntityDTOMapper::toDTO);
     }
 
     public Mono<Long> getProductsCount() {
