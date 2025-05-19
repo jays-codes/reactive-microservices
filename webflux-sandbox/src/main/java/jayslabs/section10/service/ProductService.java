@@ -6,4 +6,5 @@ import reactor.core.publisher.Mono;
 public interface ProductService {
     Flux<ProductDTO> saveProducts(Flux<ProductDTO> flux);
     Mono<Long> getProductsCount();
+    Flux<ProductDTO> getAllProducts();
 }

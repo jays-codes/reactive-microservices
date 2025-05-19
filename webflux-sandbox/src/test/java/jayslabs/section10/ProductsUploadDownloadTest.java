@@ -32,4 +32,12 @@ public class ProductsUploadDownloadTest {
             .verifyComplete();
     }
 
+    @Test
+    public void testDownloadProducts() {
+        this.client.downloadProducts()
+            .doOnNext(product -> log.info("received: {}", product))
+            .then()
+            .as(StepVerifier::create)
+            .verifyComplete();
+    }
 }

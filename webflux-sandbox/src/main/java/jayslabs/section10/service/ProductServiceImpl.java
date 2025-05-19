@@ -29,4 +29,10 @@ public class ProductServiceImpl implements ProductService {
     public Mono<Long> getProductsCount() {
         return this.repo.count();
     }
+
+    @Override
+    public Flux<ProductDTO> getAllProducts() {
+        return this.repo.findAll()
+        .map(EntityDTOMapper::toDTO);
+    }
 }

@@ -4,6 +4,7 @@ Jay's project/practice repo for Reactive Microservices : WebFlux + Project React
 proj: webflux-sandbox
 
 - Streaming - Uploading million Products
+- created service and related API, endpoint/methods for retrieving (download) all products. Updated ProductClient and DownloadTest as well;
 - Create ProductsUploadDownloadTest (src/test/java) to use ProductClient. testUpload() creates Flux<ProductDTO> of 10 products and calls client; to run, have springboot service running prior to executing test
 - Created ProductClient in src/test/java, defined WebClient reference, uploadProducts() to call appropriate service endpoint. Set .contentType(MediaType.APPLICATION_NDJSON)
 - Created UploadResponseDTO; ProductController using NDJSON format (MediaType.APPLICATION_NDJSON_VALUE), uploadProducts() post endpoint method
