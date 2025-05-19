@@ -1,5 +1,10 @@
 package jayslabs.section10;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardOpenOption;
+
 import org.springframework.http.MediaType;
 import org.springframework.web.reactive.function.client.WebClient;
 
@@ -25,5 +30,39 @@ public class ProductClient {
             .accept(MediaType.APPLICATION_NDJSON)
             .retrieve()
             .bodyToFlux(ProductDTO.class);
+    }
+
+    public Mono<Void> downloadProductsToFile() {
+        Path filePath = Path.of("products.txt");
+        // Delete file if it exists to avoid appending to old data
+        try {
+            Files.deleteIfExists(filePath);
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to delete existing products.txt", e);
+        }
+
+        return Mono.using(
+            () -> Files.newBufferedWriter(filePath, StandardOpenOption.CREATE, StandardOpenOption.WRITE),
+            writer -> this.client.get().uri("/products/download")
+                .accept(MediaType.APPLICATION_NDJSON)
+                .retrieve()
+                .bodyToFlux(ProductDTO.class)
+                .doOnNext(product -> {
+                    try {
+                        writer.write(product.toString());
+                        writer.newLine();
+                    } catch (IOException e) {
+                        throw new RuntimeException("Failed to write product to file", e);
+                    }
+                })
+                .then(),
+            writer -> {
+                try {
+                    writer.close();
+                } catch (IOException e) {
+                    // log or handle
+                }
+            }
+        );
     }
 }

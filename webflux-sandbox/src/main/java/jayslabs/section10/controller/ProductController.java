@@ -32,7 +32,8 @@ public class ProductController {
         log.info("invoked: ProductController.uploadProducts()");
         return this.service.saveProducts(
             products
-            .doOnNext(dto -> log.info("processing: {}", dto)))
+            //.doOnNext(dto -> log.info("processing: {}", dto))
+            )
         .then(this.service.getProductsCount())
         .map(count -> new UploadResponseDTO(UUID.randomUUID(), count));
     }

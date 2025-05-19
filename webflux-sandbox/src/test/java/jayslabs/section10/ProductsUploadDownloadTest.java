@@ -1,7 +1,5 @@
 package jayslabs.section10;
 
-import java.time.Duration;
-
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,9 +18,9 @@ public class ProductsUploadDownloadTest {
         // var flux = Flux.just(new ProductDTO(null, "iphone", 100))
         //     .delayElements(Duration.ofSeconds(10));
 
-        var flux = Flux.range(1, 10)
-            .map(i -> new ProductDTO(null, "product - #" + i, 100 + i))
-            .delayElements(Duration.ofSeconds(2));
+        var flux = Flux.range(1, 1_000_000)
+            .map(i -> new ProductDTO(null, "product - #" + i, i));
+            //.delayElements(Duration.ofSeconds(2));
 
 
         this.client.uploadProducts(flux)
@@ -35,6 +33,15 @@ public class ProductsUploadDownloadTest {
     @Test
     public void testDownloadProducts() {
         this.client.downloadProducts()
+            .doOnNext(product -> log.info("received: {}", product))
+            .then()
+            .as(StepVerifier::create)
+            .verifyComplete();
+    }
+
+    @Test
+    public void testDownloadProductsToFile() {
+        this.client.downloadProductsToFile()
             .doOnNext(product -> log.info("received: {}", product))
             .then()
             .as(StepVerifier::create)
