@@ -7,4 +7,6 @@ public interface ProductService {
     Flux<ProductDTO> saveProducts(Flux<ProductDTO> flux);
     Mono<Long> getProductsCount();
     Flux<ProductDTO> getAllProducts();
+    Mono<ProductDTO> saveProduct(Mono<ProductDTO> dto);
+    Flux<ProductDTO> streamProducts();
 }

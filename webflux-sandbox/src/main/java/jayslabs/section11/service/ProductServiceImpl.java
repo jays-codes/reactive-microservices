@@ -8,12 +8,28 @@ import jayslabs.section11.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+import reactor.core.publisher.Sinks;
 
 @Service
 @RequiredArgsConstructor
 public class ProductServiceImpl implements ProductService {
 
     private final ProductRepository repo;
+    private final Sinks.Many<ProductDTO> productSink;
+
+
+    @Override
+    public Mono<ProductDTO> saveProduct(Mono<ProductDTO> mono) {
+        return mono.map(EntityDTOMapper::toEntity)
+        .flatMap(this.repo::save)
+        .map(EntityDTOMapper::toDTO)
+        .doOnNext(this.productSink::tryEmitNext);
+    }
+
+    @Override
+    public Flux<ProductDTO> streamProducts() {
+        return this.productSink.asFlux();
+    }
 
     @Override
     public Flux<ProductDTO> saveProducts(Flux<ProductDTO> flux) {

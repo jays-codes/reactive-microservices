@@ -4,6 +4,8 @@ Jay's project/practice repo for Reactive Microservices : WebFlux + Project React
 proj: webflux-sandbox
 
 - Server Sent Events
+- Update service class (interface and impl) to autowire productSink bean; added two api saveProduct(Mono<dto>):Mono<dto> that calls tryEmitNext() to save dto to productSink, and streamProduct():Flux<dto> calling productSink.asFlux()
+- create config pkg; created ApplicationConfig (@Configuration); created @Bean productSink():Sinks.Many 
 - created section11 package
 
 - Streaming - Uploading million Products
