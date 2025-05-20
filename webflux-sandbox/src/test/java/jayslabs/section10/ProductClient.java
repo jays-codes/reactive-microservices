@@ -32,6 +32,8 @@ public class ProductClient {
             .bodyToFlux(ProductDTO.class);
     }
 
+
+    // just for demo
     public Mono<Void> downloadProductsToFile() {
         Path filePath = Path.of("products.txt");
         // Delete file if it exists to avoid appending to old data

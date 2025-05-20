@@ -1,5 +1,7 @@
 package jayslabs.section10;
 
+import java.nio.file.Path;
+
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -46,5 +48,15 @@ public class ProductsUploadDownloadTest {
             .then()
             .as(StepVerifier::create)
             .verifyComplete();
+    }
+
+    @Test
+    public void testFluxFileWriter() {
+        this.client.downloadProducts()
+            .map(ProductDTO::toString)
+            .as(flux -> FluxFileWriter.create(flux, Path.of("products2.txt")))
+            .as(StepVerifier::create)
+            .expectComplete()
+            .verify();
     }
 }
