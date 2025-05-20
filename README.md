@@ -3,6 +3,9 @@ Jay's project/practice repo for Reactive Microservices : WebFlux + Project React
 
 proj: webflux-sandbox
 
+- Server Sent Events
+- created section11 package
+
 - Streaming - Uploading million Products
 - FluxFileWriter - enables writing to a file as a Flux<String> publisher is being processed; modified test class to call existing downloadProducts() with FluxFileWriter
 - Added client method to write records to a file(products.txt) as the Flux<ProductDTO> publisher is being processed; modified test to process 1,000,000 records
