@@ -11,9 +11,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import jayslabs.section10.dto.ProductDTO;
-import jayslabs.section10.dto.UploadResponseDTO;
-import jayslabs.section10.service.ProductService;
+import jayslabs.section11.dto.ProductDTO;
+import jayslabs.section11.dto.UploadResponseDTO;
+import jayslabs.section11.service.ProductService;
 import lombok.AllArgsConstructor;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -26,6 +26,19 @@ public class ProductController {
     private static final Logger log = LoggerFactory.getLogger(ProductController.class);
 
     private final ProductService service;
+
+
+    @PostMapping(value = "/save")
+    public Mono<ProductDTO> saveProduct(@RequestBody Mono<ProductDTO> dto) {
+        log.info("invoked: ProductController.saveProduct()");
+        return this.service.saveProduct(dto);
+    }
+
+    @GetMapping(value = "stream", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+    public Flux<ProductDTO> streamProducts() {
+        log.info("invoked: ProductController.streamProducts()");
+        return this.service.streamProducts();
+    }
 
     @PostMapping(value = "/upload", consumes = MediaType.APPLICATION_NDJSON_VALUE)
     public Mono<UploadResponseDTO> uploadProducts(@RequestBody Flux<ProductDTO> products) {
