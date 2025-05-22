@@ -4,6 +4,13 @@
             "type": "java",
             "name": "WebfluxSandboxApplication",
             "request": "launch",
+            "mainClass": "jayslabs.section11.WebfluxSandboxApplication",
+            "projectName": "webflux-sandbox"
+        },
+        {
+            "type": "java",
+            "name": "WebfluxSandboxApplication",
+            "request": "launch",
             "mainClass": "jayslabs.section8.WebfluxSandboxApplication",
             "projectName": "webflux-sandbox"
         },
