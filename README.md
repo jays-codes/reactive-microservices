@@ -3,6 +3,9 @@ Jay's project/practice repo for Reactive Microservices : WebFlux + Project React
 
 proj: webflux-sandbox
 
+Best Practices
+- [BP] ConnectPoolTest; test concurrent requests from client to slow service (demo03). created section11 on test package
+
 - Server Sent Events
 - added ServerSentEventTest: @SpringBootTest, tested streamProduct endpoint
 - Added filtering to Streaming. Created DataSetupService (@Service) implementing <<CommandLineRunner>> to emit 1,000 ProductDTO in 1 second interval with Random prices (via ThreadLocalRandom); new streaming endpoint in ProductController that accepts a @PathVariable (price) and passed to .filter() for filtering the streaming data; used template UI page
