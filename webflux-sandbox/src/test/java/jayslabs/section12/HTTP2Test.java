@@ -10,24 +10,25 @@ import org.springframework.web.reactive.function.client.WebClient;
 import jayslabs.section11.entity.Product;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+import reactor.netty.http.HttpProtocol;
 import reactor.netty.http.client.HttpClient;
 import reactor.netty.resources.ConnectionProvider;
 import reactor.test.StepVerifier;
 
-public class ConnectPoolTest extends AbstractWebClient {
+public class HTTP2Test extends AbstractWebClient {
 
-    private static final Logger log = LoggerFactory.getLogger(ConnectPoolTest.class);
+    private static final Logger log = LoggerFactory.getLogger(HTTP2Test.class);
 
     private final WebClient client = createWebClient(
         b -> {
-            var poolSize = 2000;
+            var poolSize = 2;
             var provider = ConnectionProvider.builder("custom")
             .lifo()
             .maxConnections(poolSize)
-            .pendingAcquireMaxCount(poolSize)
             .build();
 
             var httpClient = HttpClient.create(provider)
+            .protocol(HttpProtocol.H2C)
             .compress(true)
             .keepAlive(true);
 
@@ -37,10 +38,10 @@ public class ConnectPoolTest extends AbstractWebClient {
 
     @Test
     public void concurrentRequests() throws InterruptedException {
-        var max = 2000;
+        var max = 30000;
         Flux.range(1, max)
         .flatMap(this::getProduct, max)
-        .doOnNext(p -> log.info("product: {}", p))
+        //.doOnNext(p -> log.info("product: {}", p))
         .collectList()
         .as(StepVerifier::create)
         .assertNext(products -> Assertions.assertEquals(max, products.size()))

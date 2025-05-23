@@ -4,6 +4,7 @@ Jay's project/practice repo for Reactive Microservices : WebFlux + Project React
 proj: webflux-sandbox
 
 Best Practices
+- [BP] HTTP2Test; Enabled HTTP2 in WebClient instance setup with pool size only 1. Processed 30,000 request in 5 secs 
 - [BP] Customized Connection Pool to handle more request: Consumer<WebClient.Builder>, ConnectionProvider, .lifo(), .maxConnections(poolsize), .pendingAcquireMaxCount(), .compress(), .clientConnector(), ReactorClientHttpConnector
 - [BP] ConnectPoolTest; test concurrent requests from client to slow service (demo03). created section11 on test package
 
@@ -17,7 +18,7 @@ Best Practices
 
 - Streaming - Uploading million Products
 - FluxFileWriter - enables writing to a file as a Flux<String> publisher is being processed; modified test class to call existing downloadProducts() with FluxFileWriter
-- Added client method to write records to a file(products.txt) as the Flux<ProductDTO> publisher is being processed; modified test to process 1,000,000 records
+- Added client method to write records to a file(products.txt) as the Flux<ProductDTO> publisher is being processed; [BP] modified test to process 1,000,000 records
 - created service and related API, endpoint/methods for retrieving (download) all products. Updated ProductClient and DownloadTest as well;
 - Create ProductsUploadDownloadTest (src/test/java) to use ProductClient. testUpload() creates Flux<ProductDTO> of 10 products and calls client; to run, have springboot service running prior to executing test
 - Created ProductClient in src/test/java, defined WebClient reference, uploadProducts() to call appropriate service endpoint. Set .contentType(MediaType.APPLICATION_NDJSON)
