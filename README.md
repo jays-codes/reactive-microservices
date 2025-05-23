@@ -4,6 +4,7 @@ Jay's project/practice repo for Reactive Microservices : WebFlux + Project React
 proj: webflux-sandbox
 
 Best Practices
+- [BP] Customized Connection Pool to handle more request: Consumer<WebClient.Builder>, ConnectionProvider, .lifo(), .maxConnections(poolsize), .pendingAcquireMaxCount(), .compress(), .clientConnector(), ReactorClientHttpConnector
 - [BP] ConnectPoolTest; test concurrent requests from client to slow service (demo03). created section11 on test package
 
 - Server Sent Events
