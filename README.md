@@ -1,6 +1,12 @@
 # reactive-microservices
 Jay's project/practice repo for Reactive Microservices : WebFlux + Project Reactor
 
+proj: Stock Trading Services
+proj: customer-service
+- created domain: (enum) Ticker, TradeAction; entity: Customer, PortfolioItem; dto: (record) Holding, CustomerInfo, StockTradeRequest, StockTradeResponse; repository: <<CustomerRepository>>, <<PortfolioRepository>>
+- create packages: advice, controller, domain, dto, entity, exceptions, mapper, repository, service; application.yaml, logback.xml, data.sql
+- initial proj create, SpringBoot 3.5.0, jdk 21, jar; dep: Spring Data R2DBC, Spring Reactive Web, H2, Lombok
+
 proj: webflux-sandbox
 
 Best Practices
