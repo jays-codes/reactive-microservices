@@ -3,6 +3,7 @@ Jay's project/practice repo for Reactive Microservices : WebFlux + Project React
 
 proj: Stock Trading Services
 proj: customer-service
+- created Exception classes: CustomerNotFoundException, InsufficientBalanceException, InsufficientSharesException, ApplicationExceptions with factory methods
 - created domain: (enum) Ticker, TradeAction; entity: Customer, PortfolioItem; dto: (record) Holding, CustomerInfo, StockTradeRequest, StockTradeResponse; repository: <<CustomerRepository>>, <<PortfolioRepository>>
 - create packages: advice, controller, domain, dto, entity, exceptions, mapper, repository, service; application.yaml, logback.xml, data.sql
 - initial proj create, SpringBoot 3.5.0, jdk 21, jar; dep: Spring Data R2DBC, Spring Reactive Web, H2, Lombok
@@ -11,7 +12,7 @@ proj: webflux-sandbox
 
 Best Practices
 - [BP] HTTP2Test; Enabled HTTP2 in WebClient instance setup with pool size only 1. Processed 30,000 request in 5 secs 
-- [BP] Customized Connection Pool to handle more request: Consumer<WebClient.Builder>, ConnectionProvider, .lifo(), .maxConnections(poolsize), .pendingAcquireMaxCount(), .compress(), .clientConnector(), ReactorClientHttpConnector
+- [BP] Customized Connection Pool to handle more request: Consumer<WebClient.Builder>, ConnectionProvider, .lifo(), .maxConnections(poolsize), .pendingAcquireMaxCount(), .compress(), .clientConnector(), ReactorClientHttpConnector+
 - [BP] ConnectPoolTest; test concurrent requests from client to slow service (demo03). created section11 on test package
 
 - Server Sent Events
