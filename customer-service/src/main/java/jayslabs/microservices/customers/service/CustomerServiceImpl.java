@@ -2,7 +2,7 @@ package jayslabs.microservices.customers.service;
 
 import org.springframework.stereotype.Service;
 
-import jayslabs.microservices.customers.dto.CustomerInfo;
+import jayslabs.microservices.customers.dto.CustomerInfoDTO;
 import jayslabs.microservices.customers.entity.Customer;
 import jayslabs.microservices.customers.exceptions.ApplicationExceptions;
 import jayslabs.microservices.customers.mapper.CustomerMapper;
@@ -19,14 +19,14 @@ public class CustomerServiceImpl implements CustomerService {
     private final PortfolioItemRepository portfolioItemRepository;
 
     @Override
-    public Mono<CustomerInfo> findCustomerInfoById(Integer id) {
+    public Mono<CustomerInfoDTO> findCustomerInfoById(Integer id) {
         return this.customerRepository.findById(id)
         .switchIfEmpty(ApplicationExceptions.customerNotFound(id))
-        .flatMap(this::getCustomerInfo);
+        .flatMap(this::getCustomerInfoWithPortfolioItem);
         
     }
 
-    private Mono<CustomerInfo> getCustomerInfo(Customer customer) {
+    private Mono<CustomerInfoDTO> getCustomerInfoWithPortfolioItem(Customer customer) {
         return this.portfolioItemRepository.findAllByCustomerId(customer.getId())
         .collectList()
         .map(items -> CustomerMapper.toCustomerInfo(customer, items));

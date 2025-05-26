@@ -3,6 +3,7 @@ Jay's project/practice repo for Reactive Microservices : WebFlux + Project React
 
 proj: Stock Trading Services
 proj: customer-service
+- refactored DTO naming; renamed private method in Service impl. [BP] template for entities with entity collection inside entity, with dto containing both parent entity and entity collection info. e.g. Order/OrderItem
 - created <<CustomerService>>, CustomerServiceImpl with (+)findCustomerInfoById(id):Mono<CustomerInfo> making a lambda call to this method ->, (-) getCustomerInfo(customer):Mono<CustomerInfo>; create CustomerMapper with toCustomerInfo(customer, List<PortfolioItem>):CustomerInfo
 - created Exception classes: CustomerNotFoundException, InsufficientBalanceException, InsufficientSharesException, ApplicationExceptions with factory methods
 - created domain: (enum) Ticker, TradeAction; entity: Customer, PortfolioItem; dto: (record) Holding, CustomerInfo, StockTradeRequest, StockTradeResponse; repository: <<CustomerRepository>>, <<PortfolioRepository>>
