@@ -29,7 +29,7 @@ public class CustomerServiceImpl implements CustomerService {
     private Mono<CustomerInfoDTO> getCustomerInfoWithPortfolioItem(Customer customer) {
         return this.portfolioItemRepository.findAllByCustomerId(customer.getId())
         .collectList()
-        .map(items -> CustomerMapper.toCustomerInfo(customer, items));
+        .map(items -> CustomerMapper.toCustomerInfoDTO(customer, items));
     }
 
 } 
