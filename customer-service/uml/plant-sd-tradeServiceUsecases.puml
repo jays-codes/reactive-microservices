@@ -1,0 +1,80 @@
+@startuml
+actor Client
+participant "TradeServiceImpl" as TradeService
+participant "CustomerRepository" as CustomerRepo
+participant "PortfolioItemRepository" as PortfolioRepo
+participant "ApplicationExceptions" as Exceptions
+participant "CustomerMapper" as Mapper
+
+Client -> TradeService: processTrade(customerId, request)
+activate TradeService
+alt BUY
+    TradeService -> CustomerRepo: findById(customerId)
+    activate CustomerRepo
+    CustomerRepo --> TradeService: Mono<Customer>
+    deactivate CustomerRepo
+    TradeService -> TradeService: filter balance
+    alt Insufficient balance
+        TradeService -> Exceptions: insufficientBalance(customerId)
+        activate Exceptions
+        Exceptions --> TradeService: Mono.error(InsufficientBalanceException)
+        deactivate Exceptions
+        TradeService --> Client: Mono.error(InsufficientBalanceException)
+    else Sufficient balance
+        TradeService -> PortfolioRepo: findByCustomerIdAndTicker(customerId, request.ticker)
+        activate PortfolioRepo
+        PortfolioRepo --> TradeService: Mono<PortfolioItem>
+        deactivate PortfolioRepo
+        TradeService -> TradeService: defaultIfEmpty(toPortfolioItem)
+        TradeService -> TradeService: executeBuy(customer, portfolioItem, request)
+        TradeService -> TradeService: updateBalanceAndPortfolio(customer, portfolioItem, request)
+        TradeService -> CustomerRepo: save(customer)
+        activate CustomerRepo
+        CustomerRepo --> TradeService: Customer
+        deactivate CustomerRepo
+        TradeService -> PortfolioRepo: save(portfolioItem)
+        activate PortfolioRepo
+        PortfolioRepo --> TradeService: PortfolioItem
+        deactivate PortfolioRepo
+        TradeService -> Mapper: toStockTradeResponse(customerId, balance, request)
+        activate Mapper
+        Mapper --> TradeService: StockTradeResponse
+        deactivate Mapper
+        TradeService --> Client: Mono<StockTradeResponse>
+    end
+else SELL
+    TradeService -> CustomerRepo: findById(customerId)
+    activate CustomerRepo
+    CustomerRepo --> TradeService: Mono<Customer>
+    deactivate CustomerRepo
+    TradeService -> PortfolioRepo: findByCustomerIdAndTicker(customerId, request.ticker)
+    activate PortfolioRepo
+    PortfolioRepo --> TradeService: Mono<PortfolioItem>
+    deactivate PortfolioRepo
+    TradeService -> TradeService: filter shares
+    alt Insufficient shares
+        TradeService -> Exceptions: insufficientShares(customerId)
+        activate Exceptions
+        Exceptions --> TradeService: Mono.error(InsufficientSharesException)
+        deactivate Exceptions
+        TradeService --> Client: Mono.error(InsufficientSharesException)
+    else Sufficient shares
+        TradeService -> TradeService: executeSell(customer, portfolioItem, request)
+        TradeService -> TradeService: updateBalanceAndPortfolio(customer, portfolioItem, request)
+        TradeService -> CustomerRepo: save(customer)
+        activate CustomerRepo
+        CustomerRepo --> TradeService: Customer
+        deactivate CustomerRepo
+        TradeService -> PortfolioRepo: save(portfolioItem)
+        activate PortfolioRepo
+        PortfolioRepo --> TradeService: PortfolioItem
+        deactivate PortfolioRepo
+        TradeService -> Mapper: toStockTradeResponse(customerId, balance, request)
+        activate Mapper
+        Mapper --> TradeService: StockTradeResponse
+        deactivate Mapper
+        TradeService --> Client: Mono<StockTradeResponse>
+    end
+end
+deactivate TradeService
+@enduml 

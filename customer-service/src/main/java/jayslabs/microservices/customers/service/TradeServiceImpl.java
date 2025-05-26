@@ -47,21 +47,33 @@ public class TradeServiceImpl implements TradeService {
     private Mono<StockTradeResponse> executeBuy(Customer cust, PortfolioItem pi, StockTradeRequest request) {
         cust.setBalance(cust.getBalance() - request.totalPrice());
         pi.setQuantity(pi.getQuantity() + request.quantity());
-        
+        return updateBalanceAndPortfolio(cust, pi, request);
+    }
+    
+    private Mono<StockTradeResponse> updateBalanceAndPortfolio(Customer cust, 
+        PortfolioItem pi, StockTradeRequest request) {
         var response = CustomerMapper.toStockTradeResponse(cust.getId(), cust.getBalance(), request);
         
         return Mono.zip(this.custrepo.save(cust), this.portfoliorepo.save(pi))
         .thenReturn(response);
-        //.map(tuple -> response);
     }
-    
-    private Mono<StockTradeResponse> sellStock(Integer customerId, StockTradeRequest request) { 
-        return Mono.empty();
-        // return custsrvc.findCustomerInfoById(customerId)
-        // .flatMap(cust -> {
-        //     if (cust.balance() < request.price() * request.quantity()) {
-        //         return Mono.error(new InsufficientBalanceException(customerId));
-        //     }
-        // }).map(cust -> CustomerMapper.toStockTradeResponse(cust, request));
+
+    private Mono<StockTradeResponse> executeSell(Customer cust, PortfolioItem pi, StockTradeRequest request) {
+        cust.setBalance(cust.getBalance() + request.totalPrice());
+        pi.setQuantity(pi.getQuantity() - request.quantity());
+        return updateBalanceAndPortfolio(cust, pi, request);
+    }
+
+    private Mono<StockTradeResponse> sellStock(Integer custId, StockTradeRequest request) { 
+        var custMono = this.custrepo.findById(custId)
+            .switchIfEmpty(ApplicationExceptions.customerNotFound(custId));
+
+        var portfolioItemMono = this.portfoliorepo.findByCustomerIdAndTicker(custId, request.ticker())
+        //.switchIfEmpty(ApplicationExceptions.insufficientShares(custId))
+        .filter(pi -> pi.getQuantity() >= request.quantity())
+        .switchIfEmpty(ApplicationExceptions.insufficientShares(custId));
+
+        return custMono.zipWhen(customer -> portfolioItemMono)
+        .flatMap(t -> executeSell(t.getT1(), t.getT2(), request));
     }
 } 

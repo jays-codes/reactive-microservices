@@ -3,6 +3,7 @@ Jay's project/practice repo for Reactive Microservices : WebFlux + Project React
 
 proj: Stock Trading Services
 proj: customer-service
+- added to TradeServiceImpl: sellStock(), .executeSell(), refactored balance and portfolio update in executeBuy() to updateBalanceAndPortfolio() to reuse for executeSell(); updated UML sequence diagram for TradeService use cases
 - [BP] created <<TradeService>>, TradeServiceImpl with references to repos, (+)processTrade(custId, tradeReq):Mono<StockTradeResponse>, with private methods buyStock(), sellStock(), executeBuy(), executeSell(). buyStock() preps a Mono<Customer> and Mono<PortfolioItem> prior to calling executeBuy. Used switchIfEmpty(), filter(), defaultIfEmpty(), ApplicationExceptions, mapper call to get default new PortfolioItem; executeBuy() sets fields accordingly and does repos call, calls to repo done in parallel via Mono.zip; Updated Mapper class; update UML sequence diagram
 - refactored DTO naming; renamed private method in Service impl. [BP] template for entities with entity collection inside entity, with dto containing both parent entity and entity collection info. e.g. Order/OrderItem
 - created <<CustomerService>>, CustomerServiceImpl with (+)findCustomerInfoById(id):Mono<CustomerInfo> making a lambda call to this method ->, (-) getCustomerInfo(customer):Mono<CustomerInfo>; create CustomerMapper with toCustomerInfo(customer, List<PortfolioItem>):CustomerInfo
