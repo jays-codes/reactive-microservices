@@ -5,6 +5,7 @@ participant "TradeServiceImpl" as TradeService
 participant "CustomerRepository" as CustomerRepo
 participant "PortfolioItemRepository" as PortfolioRepo
 participant "ApplicationExceptions" as Exceptions
+participant "ApplicationExceptionHandler" as ExceptionHandler
 participant "CustomerMapper" as Mapper
 
 Client -> Controller: POST /customers/{id}/trade
@@ -16,75 +17,109 @@ alt BUY
     activate CustomerRepo
     CustomerRepo --> TradeService: Mono<Customer>
     deactivate CustomerRepo
-    TradeService -> TradeService: filter balance >= totalPrice
-    alt Insufficient balance
-        TradeService -> Exceptions: insufficientBalance(customerId)
+    alt Customer not found
+        TradeService -> Exceptions: customerNotFound(customerId)
         activate Exceptions
-        Exceptions --> TradeService: Mono.error(InsufficientBalanceException)
+        Exceptions --> TradeService: Mono.error(CustomerNotFoundException)
         deactivate Exceptions
-        TradeService --> Controller: Mono.error(InsufficientBalanceException)
-        Controller --> Client: HTTP 400/500 Error
-    else Sufficient balance
-        TradeService -> PortfolioRepo: findByCustomerIdAndTicker(customerId, ticker)
-        activate PortfolioRepo
-        PortfolioRepo --> TradeService: Mono<PortfolioItem>
-        deactivate PortfolioRepo
-        TradeService -> Mapper: toPortfolioItem(customerId, ticker) [if not found]
-        TradeService -> TradeService: zipWhen(customer, portfolioItem)
-        TradeService -> TradeService: executeBuy(customer, portfolioItem, request)
-        note right: Updates customer balance and portfolio quantity
-        TradeService -> TradeService: updateBalanceAndPortfolio(customer, portfolioItem, request)
-        TradeService -> CustomerRepo: save(customer)
-        activate CustomerRepo
-        CustomerRepo --> TradeService: Customer
-        deactivate CustomerRepo
-        TradeService -> PortfolioRepo: save(portfolioItem)
-        activate PortfolioRepo
-        PortfolioRepo --> TradeService: PortfolioItem
-        deactivate PortfolioRepo
-        TradeService -> Mapper: toStockTradeResponse(customerId, balance, request)
-        activate Mapper
-        Mapper --> TradeService: StockTradeResponse
-        deactivate Mapper
-        TradeService --> Controller: Mono<StockTradeResponse>
-        Controller --> Client: HTTP 200 StockTradeResponse
+        TradeService --> Controller: CustomerNotFoundException
+        Controller -> ExceptionHandler: handleException(CustomerNotFoundException)
+        activate ExceptionHandler
+        ExceptionHandler --> Controller: ProblemDetail (404 NOT_FOUND)
+        deactivate ExceptionHandler
+        Controller --> Client: HTTP 404 ProblemDetail
+    else Customer found
+        TradeService -> TradeService: filter balance >= totalPrice
+        alt Insufficient balance
+            TradeService -> Exceptions: insufficientBalance(customerId)
+            activate Exceptions
+            Exceptions --> TradeService: Mono.error(InsufficientBalanceException)
+            deactivate Exceptions
+            TradeService --> Controller: InsufficientBalanceException
+            Controller -> ExceptionHandler: handleException(InsufficientBalanceException)
+            activate ExceptionHandler
+            ExceptionHandler --> Controller: ProblemDetail (400 BAD_REQUEST)
+            deactivate ExceptionHandler
+            Controller --> Client: HTTP 400 ProblemDetail
+        else Sufficient balance
+            TradeService -> PortfolioRepo: findByCustomerIdAndTicker(customerId, ticker)
+            activate PortfolioRepo
+            PortfolioRepo --> TradeService: Mono<PortfolioItem>
+            deactivate PortfolioRepo
+            TradeService -> Mapper: toPortfolioItem(customerId, ticker) [if not found]
+            TradeService -> TradeService: zipWhen(customer, portfolioItem)
+            TradeService -> TradeService: executeBuy(customer, portfolioItem, request)
+            note right: Updates customer balance and portfolio quantity
+            TradeService -> TradeService: updateBalanceAndPortfolio(customer, portfolioItem, request)
+            TradeService -> CustomerRepo: save(customer)
+            activate CustomerRepo
+            CustomerRepo --> TradeService: Customer
+            deactivate CustomerRepo
+            TradeService -> PortfolioRepo: save(portfolioItem)
+            activate PortfolioRepo
+            PortfolioRepo --> TradeService: PortfolioItem
+            deactivate PortfolioRepo
+            TradeService -> Mapper: toStockTradeResponse(customerId, balance, request)
+            activate Mapper
+            Mapper --> TradeService: StockTradeResponse
+            deactivate Mapper
+            TradeService --> Controller: Mono<StockTradeResponse>
+            Controller --> Client: HTTP 200 StockTradeResponse
+        end
     end
 else SELL
     TradeService -> CustomerRepo: findById(customerId)
     activate CustomerRepo
     CustomerRepo --> TradeService: Mono<Customer>
     deactivate CustomerRepo
-    TradeService -> PortfolioRepo: findByCustomerIdAndTicker(customerId, ticker)
-    activate PortfolioRepo
-    PortfolioRepo --> TradeService: Mono<PortfolioItem>
-    deactivate PortfolioRepo
-    TradeService -> TradeService: filter quantity >= requestQuantity
-    alt Insufficient shares
-        TradeService -> Exceptions: insufficientShares(customerId)
+    alt Customer not found
+        TradeService -> Exceptions: customerNotFound(customerId)
         activate Exceptions
-        Exceptions --> TradeService: Mono.error(InsufficientSharesException)
+        Exceptions --> TradeService: Mono.error(CustomerNotFoundException)
         deactivate Exceptions
-        TradeService --> Controller: Mono.error(InsufficientSharesException)
-        Controller --> Client: HTTP 400/500 Error
-    else Sufficient shares
-        TradeService -> TradeService: zipWhen(customer, portfolioItem)
-        TradeService -> TradeService: executeSell(customer, portfolioItem, request)
-        note right: Updates customer balance and portfolio quantity
-        TradeService -> TradeService: updateBalanceAndPortfolio(customer, portfolioItem, request)
-        TradeService -> CustomerRepo: save(customer)
-        activate CustomerRepo
-        CustomerRepo --> TradeService: Customer
-        deactivate CustomerRepo
-        TradeService -> PortfolioRepo: save(portfolioItem)
+        TradeService --> Controller: CustomerNotFoundException
+        Controller -> ExceptionHandler: handleException(CustomerNotFoundException)
+        activate ExceptionHandler
+        ExceptionHandler --> Controller: ProblemDetail (404 NOT_FOUND)
+        deactivate ExceptionHandler
+        Controller --> Client: HTTP 404 ProblemDetail
+    else Customer found
+        TradeService -> PortfolioRepo: findByCustomerIdAndTicker(customerId, ticker)
         activate PortfolioRepo
-        PortfolioRepo --> TradeService: PortfolioItem
+        PortfolioRepo --> TradeService: Mono<PortfolioItem>
         deactivate PortfolioRepo
-        TradeService -> Mapper: toStockTradeResponse(customerId, balance, request)
-        activate Mapper
-        Mapper --> TradeService: StockTradeResponse
-        deactivate Mapper
-        TradeService --> Controller: Mono<StockTradeResponse>
-        Controller --> Client: HTTP 200 StockTradeResponse
+        TradeService -> TradeService: filter quantity >= requestQuantity
+        alt Insufficient shares
+            TradeService -> Exceptions: insufficientShares(customerId)
+            activate Exceptions
+            Exceptions --> TradeService: Mono.error(InsufficientSharesException)
+            deactivate Exceptions
+            TradeService --> Controller: InsufficientSharesException
+            Controller -> ExceptionHandler: handleException(InsufficientSharesException)
+            activate ExceptionHandler
+            ExceptionHandler --> Controller: ProblemDetail (400 BAD_REQUEST)
+            deactivate ExceptionHandler
+            Controller --> Client: HTTP 400 ProblemDetail
+        else Sufficient shares
+            TradeService -> TradeService: zipWhen(customer, portfolioItem)
+            TradeService -> TradeService: executeSell(customer, portfolioItem, request)
+            note right: Updates customer balance and portfolio quantity
+            TradeService -> TradeService: updateBalanceAndPortfolio(customer, portfolioItem, request)
+            TradeService -> CustomerRepo: save(customer)
+            activate CustomerRepo
+            CustomerRepo --> TradeService: Customer
+            deactivate CustomerRepo
+            TradeService -> PortfolioRepo: save(portfolioItem)
+            activate PortfolioRepo
+            PortfolioRepo --> TradeService: PortfolioItem
+            deactivate PortfolioRepo
+            TradeService -> Mapper: toStockTradeResponse(customerId, balance, request)
+            activate Mapper
+            Mapper --> TradeService: StockTradeResponse
+            deactivate Mapper
+            TradeService --> Controller: Mono<StockTradeResponse>
+            Controller --> Client: HTTP 200 StockTradeResponse
+        end
     end
 end
 deactivate TradeService

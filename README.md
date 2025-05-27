@@ -3,7 +3,8 @@ Jay's project/practice repo for Reactive Microservices : WebFlux + Project React
 
 proj: Stock Trading Services
 proj: customer-service
-- created CustomerController (@RestController), 2 endpoints: getCustomerInfo(id):Mono<CustomerInfoDTO> GET /{id}, processTrade(id, Mono<StockTradeRequest>):Mono<StockTradeResponse> POST /{id}/trade
+- created ExceptionHandler, handleException():ProblemDetail methods for each exception; refactored build():ProblemDetail for use by handleException() methods; updated Sequence Diagram
+- created CustomerController (@RestController), 2 endpoints: getCustomerInfo(id):Mono<CustomerInfoDTO> GET /{id}, processTrade(id, Mono<StockTradeRequest>):Mono<StockTradeResponse> POST /{id}/trade; updated Sequence Diagram to reflect Controller
 - added to TradeServiceImpl: sellStock(), .executeSell(), refactored balance and portfolio update in executeBuy() to updateBalanceAndPortfolio() to reuse for executeSell(); updated UML sequence diagram for TradeService use cases
 - [BP] created <<TradeService>>, TradeServiceImpl with references to repos, (+)processTrade(custId, tradeReq):Mono<StockTradeResponse>, with private methods buyStock(), sellStock(), executeBuy(), executeSell(). buyStock() preps a Mono<Customer> and Mono<PortfolioItem> prior to calling executeBuy. Used switchIfEmpty(), filter(), defaultIfEmpty(), ApplicationExceptions, mapper call to get default new PortfolioItem; executeBuy() sets fields accordingly and does repos call, calls to repo done in parallel via Mono.zip; Updated Mapper class; update UML sequence diagram
 - refactored DTO naming; renamed private method in Service impl. [BP] template for entities with entity collection inside entity, with dto containing both parent entity and entity collection info. e.g. Order/OrderItem
