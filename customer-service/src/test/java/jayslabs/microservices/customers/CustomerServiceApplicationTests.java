@@ -65,7 +65,7 @@ class CustomerServiceApplicationTests {
 		.expectStatus().isEqualTo(expectedStatus)
 		.expectBody()
 		.consumeWith(result -> 
-			log.info("Trade Info: {}", Objects.requireNonNull(result.getResponseBody()))
+			log.info("Trade Info: {}", new String(Objects.requireNonNull(result.getResponseBody())))
 		);
 	}
 
