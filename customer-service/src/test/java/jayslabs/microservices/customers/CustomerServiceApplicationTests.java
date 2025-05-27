@@ -47,6 +47,52 @@ class CustomerServiceApplicationTests {
 	
 	}
 
+	@Test
+	public void testBuyAndSell(){
+		processTrade(1, new StockTradeRequest(Ticker.APPLE, 100, 50, TradeAction.BUY), HttpStatus.OK)
+		.jsonPath("$.ticker").isEqualTo("APPLE")
+		.jsonPath("$.quantity").isEqualTo(50);
+
+		processTrade(1, new StockTradeRequest(Ticker.APPLE, 50, 25, TradeAction.SELL), HttpStatus.OK)
+		.jsonPath("$.ticker").isEqualTo("APPLE")
+		.jsonPath("$.quantity").isEqualTo(25);
+
+		getCustomer(1, HttpStatus.OK)
+		.jsonPath("$.name").isEqualTo("Anya")
+		.jsonPath("$.balance").isEqualTo(6250);
+
+		processTrade(1, new StockTradeRequest(Ticker.GOOGLE, 25, 12, TradeAction.BUY), HttpStatus.OK)
+		.jsonPath("$.ticker").isEqualTo("GOOGLE")
+		.jsonPath("$.quantity").isEqualTo(12);
+
+		getCustomer(1, HttpStatus.OK)
+		.jsonPath("$.holdings").isNotEmpty()
+		.jsonPath("$.holdings[0].ticker").isEqualTo("APPLE")
+		.jsonPath("$.holdings[0].quantity").isEqualTo(25)
+		.jsonPath("$.holdings[1].ticker").isEqualTo("GOOGLE")
+		.jsonPath("$.holdings[1].quantity").isEqualTo(12);
+	}
+
+
+	@Test
+	public void testCustomerNotFound(){
+		getCustomer(100, HttpStatus.NOT_FOUND)
+		.jsonPath("$.detail").isEqualTo("Customer [id=100] not found");
+	}
+
+	@Test
+	public void testInsufficientShares(){
+		processTrade(1, new StockTradeRequest(Ticker.AMAZON, 100, 50, TradeAction.SELL), HttpStatus.BAD_REQUEST)
+		.jsonPath("$.detail").isEqualTo("Customer [id=1] has insufficient shares");
+		
+	}
+
+	@Test
+	public void testInsufficientFunds(){
+		processTrade(1, new StockTradeRequest(Ticker.APPLE, 100000, 5, TradeAction.BUY), HttpStatus.BAD_REQUEST)
+		.jsonPath("$.detail").isEqualTo("Customer [id=1] has insufficient balance");
+	}
+
 	private WebTestClient.BodyContentSpec getCustomer(Integer id, HttpStatus expectedStatus){
 		return this.client.get().uri("/customers/{id}", id)
 		.exchange()
