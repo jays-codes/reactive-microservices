@@ -3,6 +3,7 @@ Jay's project/practice repo for Reactive Microservices : WebFlux + Project React
 
 proj: Stock Trading Services
 proj: customer-service
+- CustomerServiceApplicationTests (src/test/java): used WebTestClient to test endpoints; created helper methods for getCustomer(), processTrade; test methods call helper methods and focus on asserting results
 - created ExceptionHandler, handleException():ProblemDetail methods for each exception; refactored build():ProblemDetail for use by handleException() methods; updated Sequence Diagram
 - created CustomerController (@RestController), 2 endpoints: getCustomerInfo(id):Mono<CustomerInfoDTO> GET /{id}, processTrade(id, Mono<StockTradeRequest>):Mono<StockTradeResponse> POST /{id}/trade; updated Sequence Diagram to reflect Controller
 - added to TradeServiceImpl: sellStock(), .executeSell(), refactored balance and portfolio update in executeBuy() to updateBalanceAndPortfolio() to reuse for executeSell(); updated UML sequence diagram for TradeService use cases

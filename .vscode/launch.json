@@ -2,6 +2,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "CustomerServiceApplication",
+            "request": "launch",
+            "mainClass": "jayslabs.microservices.customers.CustomerServiceApplication",
+            "projectName": "customer-service"
+        },
+        {
+            "type": "java",
             "name": "WebfluxSandboxApplication",
             "request": "launch",
             "mainClass": "jayslabs.section11.WebfluxSandboxApplication",
