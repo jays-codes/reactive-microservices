@@ -1,5 +1,12 @@
 {
     "java.compile.nullAnalysis.mode": "automatic",
     "java.configuration.updateBuildConfiguration": "automatic",
-    "java.debug.settings.onBuildFailureProceed": true
+    "java.debug.settings.onBuildFailureProceed": true,
+    "java.project.sourcePaths": [
+        "common-client/src/main/java",
+        "customer-service/customer-client/src/main/java",
+        "customer-service/customer-server/src/main/java",
+        "aggregator-service/aggregator-client/src/main/java",
+        "aggregator-service/aggregator-server/src/main/java"
+    ]
 }

@@ -2,6 +2,12 @@
 Jay's project/practice repo for Reactive Microservices : WebFlux + Project Reactor
 
 proj: Stock Trading Services
+- [BP] Major Refactor of aggregator-service and customer-service to conform to DDD principles: expose clean API contract, common-client module for shared domain logic, Bounded Context implementation
+
+proj: aggregator-service
+- create packages: advice, client, config, controller, domain, dto, exceptions, service, validator; application.yaml, logback.xml, data.sql
+- initial proj create, SpringBoot 3.5.0, jdk 21, jar; dep: Spring Reactive Web, Lombok
+
 proj: customer-service
 - CustomerServiceApplicationTests: additional Tests: buyAndSell(), negative tests: customerNotFound(), insufficientShares(), insufficientBalance(); used .jsonPath("$.detail") to evaluate string in returned ProblemDetail
 - CustomerServiceApplicationTests (src/test/java): used WebTestClient to test endpoints; created helper methods for getCustomer(), processTrade; test methods call helper methods and focus on asserting results

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>jayslabs.microservices</groupId>
+        <artifactId>reactive-microservices</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
+        <relativePath>../../pom.xml</relativePath>
+    </parent>
+
+    <artifactId>aggregator-client</artifactId>
+    <name>aggregator-client</name>
+    <description>Aggregator service client DTOs and interfaces</description>
+
+    <dependencies>
+        <!-- Common domain classes -->
+        <dependency>
+            <groupId>jayslabs.microservices</groupId>
+            <artifactId>common-client</artifactId>
+        </dependency>
+        
+        <!-- Customer client for reusing DTOs 
+        <dependency>
+            <groupId>jayslabs.microservices</groupId>
+            <artifactId>customer-client</artifactId>
+        </dependency>
+        -->
+        
+        <!-- Minimal dependencies for DTOs -->
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-annotations</artifactId>
+        </dependency>
+        
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <!-- No spring-boot-maven-plugin needed since this is not an executable JAR -->
+</project> 
