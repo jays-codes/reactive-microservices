@@ -2,7 +2,13 @@
 Jay's project/practice repo for Reactive Microservices : WebFlux + Project Reactor
 
 proj: Stock Trading Services
-- [BP] Major Refactor of aggregator-service and customer-service to conform to DDD principles: expose clean API contract, common-client module for shared domain logic, Bounded Context implementation
+- [BP] Added in aggregator.exceptions package: InvalidTradeRequestException, ApplicationExceptions 
+with factory methods returning Mono<T> where t is exception type; RequestValidator with HOFs, validate(), returning 
+UnaryOperator<Mono<TradeRequest>> or Mono<Exception> via use of AppExceptions factory methods. 
+for validation error related to TradeRequest
+- [BP] Major Refactor of aggregator-service and customer-service to conform to DDD 
+principles: separate microservice into server and client submodules; expose clean API 
+contract, common-client module for shared domain logic, Bounded Context implementation
 
 proj: aggregator-service
 - create packages: advice, client, config, controller, domain, dto, exceptions, service, validator; application.yaml, logback.xml, data.sql
