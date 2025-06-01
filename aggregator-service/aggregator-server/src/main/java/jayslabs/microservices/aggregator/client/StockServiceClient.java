@@ -1,6 +1,7 @@
 package jayslabs.microservices.aggregator.client;
 
 import java.time.Duration;
+import java.util.Objects;
 
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
@@ -13,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+import reactor.util.retry.Retry;
 
 @Component
 @RequiredArgsConstructor
@@ -20,7 +22,9 @@ import reactor.core.publisher.Mono;
 public class StockServiceClient {
     
     private final WebClient stockWebClient;
+    private Flux<PriceUpdateDTO> priceUpdatesFlux;
 
+    // get the stock price for a given ticker
     public Mono<StockPriceResponse> getStockPrice(Ticker ticker) {
         return stockWebClient
             .get()
@@ -29,13 +33,29 @@ public class StockServiceClient {
             .bodyToMono(StockPriceResponse.class);
     }
     
-    public Flux<PriceUpdateDTO> getPriceUpdates() {
+    public Flux<PriceUpdateDTO> priceUpdatesStream() {
+        if (Objects.isNull(priceUpdatesFlux)) {
+            priceUpdatesFlux = getPriceUpdates();
+        }
+        return priceUpdatesFlux;
+    }
+
+    private Retry retry(){
+        return Retry.fixedDelay(100, Duration.ofSeconds(1))
+        .doBeforeRetry(rs -> log.error("Stock Service price stream call failed. retrying: {}", 
+        rs.failure().getMessage()));
+    }
+    
+    // cache the price updates for 1 second
+    private Flux<PriceUpdateDTO> getPriceUpdates() {
         return stockWebClient
             .get()
             .uri("/stock/price-stream")
             .accept(MediaType.APPLICATION_NDJSON)
             .retrieve()
-            .bodyToFlux(PriceUpdateDTO.class);
+            .bodyToFlux(PriceUpdateDTO.class)
+            .retryWhen(retry())
+            .cache(1);
 
             // .timeout(Duration.ofSeconds(5))
             // .retryWhen(Retry.backoff(3, Duration.ofMillis(100)))
