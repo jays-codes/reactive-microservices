@@ -2,10 +2,14 @@
 Jay's project/practice repo for Reactive Microservices : WebFlux + Project Reactor
 
 proj: Stock Trading Services
+- created CustomerServiceClient (pkg: aggregator-server/aggregator.client): reactive WebClient to communicate
+with Customer-Service: getCustomerIno(custId):Mono<CustomerInfoDTO>, 
+processTrade(custId, StockTradeRequest):Mono<StockTradeResponse>, handleException(BadRequest): Mono<T>
 - StockServiceClient: Modified StockServiceClient into a Hot Publisher -> getPriceUpdates(); added cache(1) and retry logic: retryWhen(), 
 retry(), Retry.fixedDelay(), doBeforeRetry(), RetrySignal.failure(); added attribute priceUpdateFlux : Flux<PriceUpdateDTO> and initialization 
 method calling getPriceUpdates()
-- StockServiceClient: reactive WebClient to connect to Stock Service; getStockPrice(Ticker):Mono<StockPriceResponse>, getPriceUpdates():Flux<PriceUpdateDTO>
+- created StockServiceClient(pkg: aggregator-server/aggregator.client): reactive WebClient to connect to Stock Service; 
+getStockPrice(Ticker):Mono<StockPriceResponse>, getPriceUpdates():Flux<PriceUpdateDTO>
 - [BP] Added in aggregator.exceptions package: InvalidTradeRequestException, ApplicationExceptions 
 with factory methods returning Mono<T> where t is exception type; RequestValidator with HOFs, validate(), returning 
 UnaryOperator<Mono<TradeRequest>> or Mono<Exception> via use of AppExceptions factory methods. 
