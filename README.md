@@ -9,6 +9,7 @@ principles: separate microservice into server and client submodules; expose clea
 contract, common-client module for shared domain logic, Bounded Context implementation
 
 proj: aggregator-service
+- created AbstractIntegrationTest (aggregator-service/src/test/java): uses mock-server dependency. Uses @MockServerTest, @AutoConfigureWebTestClient, @SpringBootTest, MockServerClient, WebTestClient
 - created ServiceClientsConfig (aggregator-server/config) for StockServiceClient and CustomerServiceClient; passes in values from app.yaml: customer-service.url, stock-service.url
 - Added Exception handling via @ControllerAdvice, aggregator-server/advice.ApplicationExceptionHandler
 - created CustomerPortfolioControoler, StockPriceStreamController, <<StockPriceService>> and Impl
