@@ -4,15 +4,21 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>jayslabs.microservices</groupId>
-        <artifactId>reactive-microservices</artifactId>
-        <version>0.0.1-SNAPSHOT</version>
-        <relativePath>../pom.xml</relativePath>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>3.5.0</version>
+        <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
+    <groupId>jayslabs.microservices</groupId>
     <artifactId>common-client</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
     <name>common-client</name>
     <description>Common domain classes and DTOs shared across microservices</description>
+
+    <properties>
+        <java.version>21</java.version>
+    </properties>
 
     <dependencies>
         <!-- Minimal dependencies for DTOs -->
@@ -27,5 +33,5 @@
         </dependency>
     </dependencies>
 
-    <!-- No spring-boot-maven-plugin needed since this is not an executable JAR -->
+    <!-- No spring-boot-maven-plugin needed since this is a library, not an executable JAR -->
 </project> 

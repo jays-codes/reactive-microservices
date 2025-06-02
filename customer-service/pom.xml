@@ -11,43 +11,37 @@
     </parent>
 
     <groupId>jayslabs.microservices</groupId>
-    <artifactId>reactive-microservices</artifactId>
+    <artifactId>customer-service</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <packaging>pom</packaging>
-    <name>reactive-microservices</name>
-    <description>Trading Platform - Multi-Module Reactive Microservices</description>
+    <name>customer-service</name>
+    <description>Customer service microservice</description>
 
     <properties>
         <java.version>21</java.version>
     </properties>
 
     <modules>
-        <module>common-client</module>
-        <module>customer-service/customer-client</module>
-        <module>customer-service/customer-server</module>
-        <module>aggregator-service/aggregator-client</module>
-        <module>aggregator-service/aggregator-server</module>
+        <module>customer-client</module>
+        <module>customer-server</module>
     </modules>
 
     <dependencyManagement>
         <dependencies>
-            <!-- Internal module dependencies -->
+            <!-- External common dependency -->
             <dependency>
                 <groupId>jayslabs.microservices</groupId>
                 <artifactId>common-client</artifactId>
-                <version>${project.version}</version>
+                <version>0.0.1-SNAPSHOT</version>
             </dependency>
+            <!-- Internal module dependencies -->
             <dependency>
                 <groupId>jayslabs.microservices</groupId>
                 <artifactId>customer-client</artifactId>
                 <version>${project.version}</version>
             </dependency>
-            <dependency>
-                <groupId>jayslabs.microservices</groupId>
-                <artifactId>aggregator-client</artifactId>
-                <version>${project.version}</version>
-            </dependency>
         </dependencies>
     </dependencyManagement>
 
+    <!-- No build plugins needed since this is just a parent POM -->
 </project> 

@@ -2,6 +2,14 @@
 Jay's project/practice repo for Reactive Microservices : WebFlux + Project Reactor
 
 proj: Stock Trading Services
+- Important: refer to [BP]README2.md [added] for Stock Trading Microservices details
+- Major Refactor of aggregator-service and customer-service to remove parent relationship with reactive-microservices: modified individual project pom and submodule poms
+- [BP] Major Refactor of aggregator-service and customer-service to conform to DDD 
+principles: separate microservice into server and client submodules; expose clean API 
+contract, common-client module for shared domain logic, Bounded Context implementation
+
+proj: aggregator-service
+- created ServiceClientsConfig (aggregator-server/config) for StockServiceClient and CustomerServiceClient; passes in values from app.yaml: customer-service.url, stock-service.url
 - Added Exception handling via @ControllerAdvice, aggregator-server/advice.ApplicationExceptionHandler
 - created CustomerPortfolioControoler, StockPriceStreamController, <<StockPriceService>> and Impl
 - created <<CustomerPortfolioService>>, impl class (@Service) with getCustomperPortfolio():Mono<CustomerInfoDTO>, processTrade(custId, TradeReq):Mono<StockTradeResp> - which calls stockClient.getStockPrice(ticker), and custClient.processTrade(custId, StockTradeRequest); created StockTradeMapper class with .toStockTradeRequest(TradeRequest, price):StockTradeRequest  
@@ -17,11 +25,6 @@ getStockPrice(Ticker):Mono<StockPriceResponse>, getPriceUpdates():Flux<PriceUpda
 with factory methods returning Mono<T> where t is exception type; RequestValidator with HOFs, validate(), returning 
 UnaryOperator<Mono<TradeRequest>> or Mono<Exception> via use of AppExceptions factory methods. 
 for validation error related to TradeRequest
-- [BP] Major Refactor of aggregator-service and customer-service to conform to DDD 
-principles: separate microservice into server and client submodules; expose clean API 
-contract, common-client module for shared domain logic, Bounded Context implementation
-
-proj: aggregator-service
 - create packages: advice, client, config, controller, domain, dto, exceptions, service, validator; application.yaml, logback.xml, data.sql
 - initial proj create, SpringBoot 3.5.0, jdk 21, jar; dep: Spring Reactive Web, Lombok
 
