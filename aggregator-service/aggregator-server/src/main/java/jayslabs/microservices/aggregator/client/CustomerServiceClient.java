@@ -9,10 +9,10 @@ import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.WebClientResponseException.BadRequest;
 import org.springframework.web.reactive.function.client.WebClientResponseException.NotFound;
 
+import jayslabs.microservices.aggregator.client.dto.CustomerInfoDTO;
+import jayslabs.microservices.aggregator.client.dto.StockTradeRequest;
+import jayslabs.microservices.aggregator.client.dto.StockTradeResponse;
 import jayslabs.microservices.aggregator.exceptions.ApplicationExceptions;
-import jayslabs.microservices.customers.client.dto.CustomerInfoDTO;
-import jayslabs.microservices.customers.client.dto.StockTradeRequest;
-import jayslabs.microservices.customers.client.dto.StockTradeResponse;
 import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Mono;
 
