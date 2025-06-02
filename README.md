@@ -2,6 +2,9 @@
 Jay's project/practice repo for Reactive Microservices : WebFlux + Project Reactor
 
 proj: Stock Trading Services
+- Added Exception handling via @ControllerAdvice, aggregator-server/advice.ApplicationExceptionHandler
+- created CustomerPortfolioControoler, StockPriceStreamController, <<StockPriceService>> and Impl
+- created <<CustomerPortfolioService>>, impl class (@Service) with getCustomperPortfolio():Mono<CustomerInfoDTO>, processTrade(custId, TradeReq):Mono<StockTradeResp> - which calls stockClient.getStockPrice(ticker), and custClient.processTrade(custId, StockTradeRequest); created StockTradeMapper class with .toStockTradeRequest(TradeRequest, price):StockTradeRequest  
 - created CustomerServiceClient (pkg: aggregator-server/aggregator.client): reactive WebClient to communicate
 with Customer-Service: getCustomerIno(custId):Mono<CustomerInfoDTO>, 
 processTrade(custId, StockTradeRequest):Mono<StockTradeResponse>, handleException(BadRequest): Mono<T>
