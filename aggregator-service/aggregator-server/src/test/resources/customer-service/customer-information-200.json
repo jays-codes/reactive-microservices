@@ -1,0 +1,15 @@
+{
+    "id": 1,
+    "name": "Anya Forger",
+    "balance": 10000,
+    "holdings": [
+        {
+            "ticker": "APPLE",
+            "quantity": 100
+        },
+        {
+            "ticker": "GOOGLE",
+            "quantity": 200
+        }
+    ]
+}
