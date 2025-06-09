@@ -9,7 +9,8 @@ principles: separate microservice into server and client submodules; expose clea
 contract, common-client module for shared domain logic, Bounded Context implementation
 
 proj: aggregator-service
-- created CustomerInformationTest: testCustomerInfo(). response data json file; modified AbstractIntegrationTest - added resourceToString()
+- refactored CIT: added mockCustomerInfo(path, respCode), getCustomerInfo(HttpStatus), testCustomerInfo() to call previous two methods
+- created CustomerInformationTest (CIT): testCustomerInfo(). response data json file; modified AbstractIntegrationTest - added resourceToString()
 - created AbstractIntegrationTest (aggregator-service/src/test/java): uses mock-server dependency. Uses @MockServerTest, @AutoConfigureWebTestClient, @SpringBootTest, MockServerClient, WebTestClient
 - created ServiceClientsConfig (aggregator-server/config) for StockServiceClient and CustomerServiceClient; passes in values from app.yaml: customer-service.url, stock-service.url
 - Added Exception handling via @ControllerAdvice, aggregator-server/advice.ApplicationExceptionHandler
