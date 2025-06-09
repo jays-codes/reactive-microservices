@@ -9,6 +9,7 @@ principles: separate microservice into server and client submodules; expose clea
 contract, common-client module for shared domain logic, Bounded Context implementation
 
 proj: aggregator-service
+- created StockPriceStreamTest: testStockPriceStream() - .withContentType(MediaType.parse("application/x-ndjson")), .returnResult(), .accept(MediaType.TEXT_EVENT_STREAM); updated controller api for price stream to use MediaType.TEXT_EVENT_STREAM; created /stock-service/stock-price-stream-200.jsonl test response data file
 - refactored CIT: added mockCustomerInfo(path, respCode), getCustomerInfo(HttpStatus), testCustomerInfo() to call previous two methods
 - created CustomerInformationTest (CIT): testCustomerInfo(). response data json file; modified AbstractIntegrationTest - added resourceToString()
 - created AbstractIntegrationTest (aggregator-service/src/test/java): uses mock-server dependency. Uses @MockServerTest, @AutoConfigureWebTestClient, @SpringBootTest, MockServerClient, WebTestClient

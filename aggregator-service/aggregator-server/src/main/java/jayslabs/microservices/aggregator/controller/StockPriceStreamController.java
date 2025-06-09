@@ -29,7 +29,7 @@ public class StockPriceStreamController {
      * 
      * @return stream of price updates
      */
-    @GetMapping(value = "/price-stream", produces = MediaType.APPLICATION_NDJSON_VALUE)
+    @GetMapping(value = "/price-stream", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
     public Flux<PriceUpdateDTO> streamPriceUpdates() {
         return stockPriceService.streamPriceUpdates();
     }
