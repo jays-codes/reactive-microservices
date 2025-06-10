@@ -1,0 +1,9 @@
+{
+    "customerId": 1,
+    "ticker": "APPLE",
+    "price": 300,
+    "quantity": 3,
+    "action": "BUY",
+    "totalPrice": 900,
+    "balance": 9100
+}
