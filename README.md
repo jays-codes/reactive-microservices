@@ -1,6 +1,8 @@
 # reactive-microservices
 Jay's project/practice repo for Reactive Microservices : WebFlux + Project Reactor
 
+#### [handwritten notes](https://github.com/user-attachments/files/20663593/reactive.microservices.notes-2025-06-09-21-49.pdf)
+
 proj: Stock Trading Services
 - added index.html front end; updated README2.md
 - Important: refer to [BP]README2.md [added] for Stock Trading Microservices details
