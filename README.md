@@ -2,6 +2,7 @@
 Jay's project/practice repo for Reactive Microservices : WebFlux + Project Reactor
 
 proj: Stock Trading Services
+- added index.html front end; updated README2.md
 - Important: refer to [BP]README2.md [added] for Stock Trading Microservices details
 - Major Refactor of aggregator-service and customer-service to remove parent relationship with reactive-microservices: modified individual project pom and submodule poms
 - [BP] Major Refactor of aggregator-service and customer-service to conform to DDD 

@@ -92,6 +92,12 @@ mvn spring-boot:run
 - `POST /customers/{id}/trade` - Process trade via aggregation
 - `GET /stock/price-stream` - Stream real-time stock prices
 
+### Stock Service
+- Running on Docker image (ask repo owner)
+
+### Basic Front-end 
+- http://localhost:8080/?customer=1#
+
 ## Dependencies Between Services
 
 ```

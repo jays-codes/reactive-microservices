@@ -2,6 +2,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "AggregatorServiceApplication",
+            "request": "launch",
+            "mainClass": "jayslabs.microservices.aggregator.AggregatorServiceApplication",
+            "projectName": "aggregator-server"
+        },
+        {
+            "type": "java",
             "name": "CustomerServiceApplication",
             "request": "launch",
             "mainClass": "jayslabs.microservices.customers.CustomerServiceApplication",
